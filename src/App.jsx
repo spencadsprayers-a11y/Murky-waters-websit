@@ -32,7 +32,6 @@ export default function App() {
 
   const bundles = Math.floor(totalItems / 3);
   const remainder = totalItems % 3;
-
   const productTotal =
     totalItems >= 3 ? bundles * 20 + remainder * 8 : totalItems * 8;
 
@@ -58,9 +57,7 @@ Ready to order 👍`;
   )}`;
 
   return (
-    <div className="bg-black text-white min-h-screen px-4 pb-32">
-
-      {/* HEADER */}
+    <div className="bg-black text-white min-h-screen px-4 pb-40">
       <section className="text-center py-10 bg-gradient-to-b from-pink-950/50 to-black rounded-b-3xl">
         <p className="text-pink-400 text-sm font-bold tracking-widest">
           MURKY WATERS
@@ -68,9 +65,7 @@ Ready to order 👍`;
 
         <h1 className="text-5xl font-black mt-2">Fishing Glooze</h1>
 
-        <p className="text-gray-300 mt-3">
-          Sticky. Strong. Irresistible.
-        </p>
+        <p className="text-gray-300 mt-3">Sticky. Strong. Irresistible.</p>
 
         <div className="inline-block bg-yellow-400 text-black px-6 py-3 rounded-2xl font-black text-2xl mt-5 shadow-lg">
           🔥 3 FOR £20 🔥
@@ -85,9 +80,51 @@ Ready to order 👍`;
         <p className="text-red-400 text-sm mt-2">
           ⚡ Limited stock — popular flavours sell fast
         </p>
+
+        <a
+          href="https://www.facebook.com/murkywaters"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full max-w-md mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-center mt-5"
+        >
+          👍 Follow us on Facebook
+        </a>
       </section>
 
-      {/* IMAGE */}
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
+        <h2 className="text-2xl font-black mb-3">Trusted by Anglers</h2>
+
+        <p className="text-gray-300 mb-4">
+          Built for carp anglers who want strong attraction, easy application and serious bait confidence.
+        </p>
+
+        <div className="grid grid-cols-3 gap-3 text-sm">
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <p className="text-yellow-400 text-xl font-black">⭐️⭐️⭐️⭐️⭐️</p>
+            <p className="mt-2 text-gray-300">Strong feedback</p>
+          </div>
+
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <p className="text-green-400 text-xl font-black">PVA</p>
+            <p className="mt-2 text-gray-300">Friendly</p>
+          </div>
+
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <p className="text-pink-400 text-xl font-black">UK</p>
+            <p className="mt-2 text-gray-300">Angler made</p>
+          </div>
+        </div>
+
+        <a
+          href="https://www.facebook.com/murkywaters"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block mt-5 text-blue-400 font-bold underline"
+        >
+          See updates & catches on Facebook
+        </a>
+      </section>
+
       <section className="py-6">
         <img
           src="/images/Product-range.png"
@@ -96,7 +133,6 @@ Ready to order 👍`;
         />
       </section>
 
-      {/* PRODUCTS */}
       <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4 shadow-2xl">
         <h2 className="text-3xl font-black text-center mb-2">
           Build Your Order
@@ -142,7 +178,6 @@ Ready to order 👍`;
         </div>
       </section>
 
-      {/* SUMMARY */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
         <p className="text-gray-400">
           {totalItems} item{totalItems !== 1 && "s"} selected
@@ -175,21 +210,27 @@ Ready to order 👍`;
           </select>
         </div>
 
-        <div className="text-3xl font-black mt-5">
-          Total: £{total}
-        </div>
+        <div className="text-3xl font-black mt-5">Total: £{total}</div>
       </section>
 
-      {/* WHATSAPP BUTTON */}
       {totalItems > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 p-4">
           <a
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full max-w-md mx-auto bg-green-500 hover:bg-green-600 text-white font-black py-5 rounded-2xl text-xl text-center shadow-lg"
+            className="block w-full max-w-md mx-auto bg-green-500 hover:bg-green-600 text-white font-black py-5 rounded-2xl text-xl text-center shadow-lg mb-2"
           >
             💬 Order Now on WhatsApp
+          </a>
+
+          <a
+            href="https://www.facebook.com/murkywaters"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full max-w-md mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl text-center shadow-lg"
+          >
+            👍 Visit Facebook Page
           </a>
         </div>
       )}
