@@ -135,21 +135,9 @@ export default function App() {
         </div>
       )}
 
-      {/* BUTTONS */}
+      {/* FACEBOOK BUTTON ONLY */}
       {items > 0 && (
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-black border-t border-gray-800">
-
-          {/* STRIPE */}
-          <a
-            href="https://buy.stripe.com/6oU9AVgFhdWx3jx71U9AA00"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-white text-black font-bold py-4 rounded-2xl text-center shadow-lg mb-2"
-          >
-            Pay securely (Apple Pay / Google Pay / Card)
-          </a>
-
-          {/* FACEBOOK */}
           <a
             href={facebookLink}
             target="_blank"
@@ -158,7 +146,6 @@ export default function App() {
           >
             Order via Facebook
           </a>
-
         </div>
       )}
 
