@@ -45,9 +45,7 @@ export default function App() {
 ${selectedText}
 
 Items: ${totalItems}
-Total: £${total}
-
-I have paid / I am ready to pay 👍`;
+Total: £${total}`;
 
   const whatsappLink = `https://wa.me/447519223822?text=${encodeURIComponent(
     whatsappMessage
@@ -64,10 +62,12 @@ I have paid / I am ready to pay 👍`;
   };
 
   return (
-    <div className="bg-black text-white min-h-screen px-4 pb-40">
+    <div className="bg-black text-white min-h-screen px-4 pb-44">
+
+      {/* HEADER */}
       <section className="text-center py-10 bg-gradient-to-b from-pink-950/50 to-black rounded-b-3xl">
         <p className="text-pink-400 text-sm font-bold tracking-widest">
-          MURKY WATERS
+          MURKYWATERS
         </p>
 
         <h1 className="text-5xl font-black mt-2">Fishing Glooze</h1>
@@ -81,44 +81,39 @@ I have paid / I am ready to pay 👍`;
         </div>
 
         <p className="text-gray-400 mt-2">or £8 each</p>
-        <p className="text-green-400 text-sm mt-3 font-bold">
-          Save £4 when you buy 3
-        </p>
       </section>
 
+      {/* PRODUCT IMAGE */}
       <section className="py-6">
         <img
           src="/images/Product-range.png"
-          alt="Murky Waters Fishing Glooze range"
-          className="mx-auto rounded-2xl shadow-2xl border border-white/10 w-full max-w-5xl"
+          alt="Murky Waters range"
+          className="mx-auto rounded-2xl shadow-2xl border border-white/10"
         />
       </section>
 
-      <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4 shadow-2xl">
-        <h2 className="text-3xl font-black text-center mb-2">
+      {/* PRODUCTS */}
+      <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4">
+        <h2 className="text-3xl font-black text-center mb-5">
           Build Your Order
         </h2>
-
-        <p className="text-center text-gray-400 mb-5">
-          Mix & match or choose multiple of the same flavour
-        </p>
 
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
             <div
               key={product}
-              className={`rounded-2xl p-4 text-center border transition ${
+              className={`rounded-2xl p-4 text-center border ${
                 quantities[product] > 0
-                  ? "border-pink-500 shadow-lg shadow-pink-500/20"
+                  ? "border-pink-500"
                   : "border-gray-700"
               }`}
             >
-              <div className="mb-4 font-bold text-lg">{product}</div>
+              <div className="mb-4 font-bold">{product}</div>
 
               <div className="flex justify-center items-center gap-4">
                 <button
                   onClick={() => updateQty(product, -1)}
-                  className="bg-gray-700 px-4 py-2 rounded-xl font-bold"
+                  className="bg-gray-700 px-4 py-2 rounded-xl"
                 >
                   -
                 </button>
@@ -129,7 +124,7 @@ I have paid / I am ready to pay 👍`;
 
                 <button
                   onClick={() => updateQty(product, 1)}
-                  className="bg-pink-500 px-4 py-2 rounded-xl font-bold"
+                  className="bg-pink-500 px-4 py-2 rounded-xl"
                 >
                   +
                 </button>
@@ -139,43 +134,53 @@ I have paid / I am ready to pay 👍`;
         </div>
       </section>
 
+      {/* TOTAL */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
-        <p className="text-gray-400">
-          {totalItems} item{totalItems !== 1 && "s"} selected
-        </p>
 
-        {totalItems > 0 && totalItems < 3 && (
-          <p className="text-yellow-400 text-sm mt-2">
-            Add {3 - totalItems} more to unlock 3 for £20
-          </p>
-        )}
+        <div className="text-gray-400 text-sm mb-1">
+          Your Order Total
+        </div>
 
-        {totalItems >= 3 && (
-          <p className="text-green-400 font-bold mt-2">
-            🎉 3 for £20 deal applied!
-          </p>
-        )}
-
-        <div className="text-3xl font-black mt-5">Total: £{total}</div>
+        <div className="text-5xl font-black text-green-400">
+          £{total}
+        </div>
 
         {totalItems > 0 && (
-          <p className="text-gray-400 text-sm mt-3">
-            After paying, please send your order on WhatsApp so I know your flavour choices.
+          <div className="text-gray-400 text-sm mt-2">
+            {bundles > 0 && `${bundles} bundle (£${bundles * 20})`}
+            {bundles > 0 && singles > 0 && " + "}
+            {singles > 0 && `${singles} single (£${singles * 8})`}
+          </div>
+        )}
+
+        {totalItems > 0 && totalItems < 3 && (
+          <p className="text-yellow-400 mt-2">
+            Add {3 - totalItems} more for 3 for £20
           </p>
         )}
       </section>
 
+      {/* FIXED BUTTONS */}
       {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 p-4">
+        <div className="fixed bottom-0 left-0 right-0 bg-black p-4 border-t border-white/10">
+
           <button
             onClick={handleStripeCheckout}
-            className="block w-full max-w-md mx-auto bg-white text-black font-black py-5 rounded-2xl text-xl text-center shadow-lg mb-2"
+            className="w-full bg-white text-black font-black py-5 rounded-2xl text-xl mb-3"
           >
-            Pay Securely by Card
+            Pay Securely
           </button>
 
           <a
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full max-w-md mx-auto bg-green-500 hover:bg-green-
+            className="block w-full bg-green-500 text-white font-black py-4 rounded-2xl text-center"
+          >
+            WhatsApp Order
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
