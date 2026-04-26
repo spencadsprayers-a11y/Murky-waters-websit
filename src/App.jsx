@@ -1,5 +1,4 @@
-            
-  import React from "react";
+import React from "react";
 
 const flavours = [
   ["Pineapple Dream", "#ffd400", "🍍"],
@@ -19,61 +18,93 @@ const flavours = [
 export default function App() {
   return (
     <div style={{ background: "#050505", color: "white", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
-      <section style={{ padding: "70px 20px", textAlign: "center", background: "radial-gradient(circle at top, #3b0a24, #050505 55%)" }}>
-        <h1 style={{ fontSize: 54, margin: 0, textTransform: "uppercase" }}>Murky Waters</h1>
-        <h2 style={{ fontSize: 42, margin: "10px 0", color: "#ff3b7a" }}>Fishing Glooze</h2>
-        <p style={{ fontSize: 24, fontWeight: "bold" }}>Sticky. Strong. Irresistible.</p>
-        <div style={{ fontSize: 44, color: "#ffd400", fontWeight: "900", marginTop: 25 }}>3 FOR £20</div>
-        <p style={{ fontSize: 20 }}>Mix & Match Any Flavours</p>
-        <a href="https://www.facebook.com/" style={{ display: "inline-block", marginTop: 25, background: "#ff3b7a", color: "white", padding: "16px 28px", borderRadius: 14, textDecoration: "none", fontWeight: "900" }}>
-          Message on Facebook to Order
-        </a>
-      </section>
 
-      <section style={{ padding: "45px 20px", background: "#111" }}>
-        <h2 style={{ textAlign: "center", fontSize: 34 }}>Built for More Takes</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, maxWidth: 1000, margin: "30px auto" }}>
-          {["PVA Friendly", "Easy to Use", "Boosts Any Bait", "All Year Round"].map((b) => (
-            <div key={b} style={{ background: "#050505", border: "1px solid #333", padding: 22, borderRadius: 18, textAlign: "center" }}>
-              <h3 style={{ color: "#ff3b7a", marginTop: 0 }}>{b}</h3>
-              <p style={{ color: "#bbb" }}>Designed to give your bait extra pulling power.</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section style={{ padding: "55px 20px" }}>
-        <h2 style={{ textAlign: "center", fontSize: 36 }}>12 Powerful Flavours</h2>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 24, maxWidth: 1200, margin: "35px auto" }}>
-          {flavours.map(([name, color, emoji]) => (
-            <div key={name} style={{ background: "#0b0b0b", border: "1px solid #333", borderRadius: 24, padding: 18, textAlign: "center", boxShadow: `0 0 22px ${color}44` }}>
-              <div style={{ margin: "0 auto", width: 105, height: 210, borderRadius: "35px 35px 28px 28px", background: "linear-gradient(#111,#000)", border: "3px solid #222", position: "relative", boxShadow: "inset 0 0 18px #555" }}>
-                <div style={{ position: "absolute", top: -35, left: 33, width: 40, height: 42, background: "#111", borderRadius: "12px 12px 4px 4px", border: "2px solid #444" }} />
-                <div style={{ position: "absolute", top: 35, left: 10, right: 10, bottom: 18, borderRadius: 16, background: "#050505", border: `2px solid ${color}` }}>
-                  <div style={{ color: "white", fontWeight: "900", fontSize: 12, marginTop: 12 }}>Murky Waters</div>
-                  <div style={{ color: "white", fontWeight: "900", fontSize: 20, marginTop: 12, lineHeight: 1 }}>FISHING<br />GLOOZE</div>
-                  <div style={{ fontSize: 34, marginTop: 10 }}>{emoji}</div>
-                  <div style={{ color, fontWeight: "900", fontSize: 13, padding: "0 5px" }}>{name}</div>
-                </div>
-              </div>
-              <h3 style={{ color, marginBottom: 5 }}>{name}</h3>
-              <p style={{ color: "#aaa", marginTop: 0 }}>120ml screw cap spout</p>
-              <p style={{ fontSize: 13, color: "#ddd", border: "1px solid #555", display: "inline-block", padding: "6px 10px", borderRadius: 999 }}>PVA Friendly</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section style={{ padding: "60px 20px", background: "#111", textAlign: "center" }}>
-        <h2 style={{ fontSize: 38 }}>Ready to Order?</h2>
-        <p style={{ fontSize: 20 }}>Pick any 3 flavours for £20.</p>
-        <p style={{ color: "#bbb" }}>Message Murky Waters on Facebook to order.</p>
-        <a href="https://www.facebook.com/" style={{ display: "inline-block", marginTop: 20, background: "#ff3b7a", color: "white", padding: "16px 28px", borderRadius: 14, textDecoration: "none", fontWeight: "900" }}>
+      {/* HERO */}
+      <section style={{ padding: "70px 20px", textAlign: "center" }}>
+        <h1 style={{ fontSize: 50 }}>Murky Waters</h1>
+        <h2 style={{ color: "#ff3b7a" }}>Fishing Glooze</h2>
+        <p>Sticky. Strong. Irresistible.</p>
+        <h2 style={{ color: "#ffd400" }}>🔥 3 FOR £20 🔥</h2>
+        <p>Mix & Match Any Flavours</p>
+        <a href="https://www.facebook.com/" style={{ background: "#ff3b7a", padding: 15, borderRadius: 10, color: "white", textDecoration: "none", fontWeight: "bold" }}>
           Message to Order
         </a>
       </section>
+
+      {/* FLAVOURS */}
+      <section style={{ padding: 20 }}>
+        <h2 style={{ textAlign: "center" }}>Flavours</h2>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: 20
+        }}>
+
+          {flavours.map(([name, color, emoji]) => (
+            <div key={name} style={{
+              background: "#111",
+              borderRadius: 20,
+              padding: 20,
+              textAlign: "center",
+              boxShadow: `0 0 20px ${color}55`
+            }}>
+
+              <div style={{
+                margin: "0 auto",
+                width: 100,
+                height: 200,
+                borderRadius: 30,
+                background: "#000",
+                border: "2px solid #333",
+                position: "relative"
+              }}>
+
+                <div style={{
+                  position: "absolute",
+                  top: -25,
+                  left: 30,
+                  width: 40,
+                  height: 35,
+                  background: "#111",
+                  borderRadius: 8
+                }} />
+
+                <div style={{
+                  position: "absolute",
+                  top: 30,
+                  left: 10,
+                  right: 10,
+                  bottom: 10,
+                  borderRadius: 10,
+                  border: `2px solid ${color}`,
+                  textAlign: "center",
+                  padding: 5
+                }}>
+                  <div style={{ fontSize: 10 }}>Murky Waters</div>
+                  <div style={{ fontWeight: "bold", fontSize: 16 }}>FISHING GLOOZE</div>
+                  <div style={{ fontSize: 30 }}>{emoji}</div>
+                  <div style={{ fontSize: 11, color, lineHeight: "1.2" }}>{name}</div>
+                </div>
+
+              </div>
+
+              <h3 style={{ color }}>{name}</h3>
+              <p>120ml screw cap spout</p>
+              <p style={{ fontSize: 12 }}>PVA Friendly</p>
+
+            </div>
+          ))}
+
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{ textAlign: "center", padding: 40 }}>
+        <h2>Order Now</h2>
+        <p>3 for £20 — message on Facebook</p>
+      </section>
+
     </div>
   );
 }
-
