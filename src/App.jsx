@@ -54,7 +54,11 @@ Ready to order 👍`;
     message
   )}`;
 
-  const facebookLink = `https://m.me/murkywaters?text=${encodeURIComponent(
+  const facebookLink = `https://www.facebook.com/messages/t/murkywaters?ref=chat&text=${encodeURIComponent(
+    message
+  )}`;
+
+  const messengerBackupLink = `https://m.me/murkywaters?text=${encodeURIComponent(
     message
   )}`;
 
@@ -129,6 +133,15 @@ Ready to order 👍`;
         className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg mt-3 text-center"
       >
         Message us on Facebook
+      </a>
+
+      <a
+        href={messengerBackupLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-4 rounded-xl text-lg mt-3 text-center"
+      >
+        Open Messenger Backup
       </a>
     </div>
   );
