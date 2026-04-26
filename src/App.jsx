@@ -53,11 +53,11 @@ Total: £${total}
 
 Ready to order 👍`;
 
-  const whatsappLink = `https://wa.me/447519223822?text=${encodeURIComponent(
-    message
-  )}`;
+  const whatsappLink = `https://wa.me/447519223822?text=${encodeURIComponent(message)}`;
 
   const facebookPage = "https://www.facebook.com/share/18jdHNeNu4/";
+
+  const messengerLink = `https://m.me/murkywaters?text=${encodeURIComponent(message)}`;
 
   return (
     <div className="bg-black text-white min-h-screen px-4 pb-40">
@@ -103,7 +103,7 @@ Ready to order 👍`;
         <h2 className="text-2xl font-black mb-3">Trusted by Anglers</h2>
 
         <p className="text-gray-300 mb-4">
-          Built for anglers who want strong attraction, easy application and real results.
+          Built for anglers who want strong attraction and real results.
         </p>
 
         <div className="grid grid-cols-3 gap-3 text-sm">
@@ -122,66 +122,23 @@ Ready to order 👍`;
             <p className="mt-2 text-gray-300">Angler made</p>
           </div>
         </div>
-
-        <a
-          href={facebookPage}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-5 text-blue-400 font-bold underline"
-        >
-          See updates & catches on Facebook
-        </a>
-      </section>
-
-      {/* IMAGE */}
-      <section className="py-6">
-        <img
-          src="/images/Product-range.png"
-          alt="Murky Waters Fishing Glooze range"
-          className="mx-auto rounded-2xl shadow-2xl border border-white/10 w-full max-w-5xl"
-        />
       </section>
 
       {/* PRODUCTS */}
-      <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4 shadow-2xl">
-        <h2 className="text-3xl font-black text-center mb-2">
+      <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4 mt-6">
+        <h2 className="text-3xl font-black text-center mb-4">
           Build Your Order
         </h2>
 
-        <p className="text-center text-gray-400 mb-5">
-          Mix & match or choose multiple of the same flavour
-        </p>
-
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
-            <div
-              key={product}
-              className={`rounded-2xl p-4 text-center border transition ${
-                quantities[product] > 0
-                  ? "border-pink-500 shadow-lg shadow-pink-500/20"
-                  : "border-gray-700"
-              }`}
-            >
-              <div className="mb-4 font-bold text-lg">{product}</div>
+            <div key={product} className="border rounded-2xl p-4 text-center">
+              <div className="mb-2 font-bold">{product}</div>
 
-              <div className="flex justify-center items-center gap-4">
-                <button
-                  onClick={() => updateQty(product, -1)}
-                  className="bg-gray-700 px-4 py-2 rounded-xl font-bold"
-                >
-                  -
-                </button>
-
-                <span className="text-xl font-black">
-                  {quantities[product]}
-                </span>
-
-                <button
-                  onClick={() => updateQty(product, 1)}
-                  className="bg-pink-500 px-4 py-2 rounded-xl font-bold"
-                >
-                  +
-                </button>
+              <div className="flex justify-center gap-3">
+                <button onClick={() => updateQty(product, -1)}>-</button>
+                <span>{quantities[product]}</span>
+                <button onClick={() => updateQty(product, 1)}>+</button>
               </div>
             </div>
           ))}
@@ -189,63 +146,38 @@ Ready to order 👍`;
       </section>
 
       {/* SUMMARY */}
-      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
-        <p className="text-gray-400">
-          {totalItems} item{totalItems !== 1 && "s"} selected
-        </p>
-
-        {totalItems > 0 && totalItems < 3 && (
-          <p className="text-yellow-400 text-sm mt-2">
-            Add {3 - totalItems} more to unlock 3 for £20
-          </p>
-        )}
-
-        {totalItems >= 3 && (
-          <p className="text-green-400 font-bold mt-2">
-            🎉 3 for £20 deal applied!
-          </p>
-        )}
-
-        <div className="mt-5">
-          <label className="block mb-2 text-sm text-gray-400">
-            Delivery option
-          </label>
-
-          <select
-            value={delivery}
-            onChange={(e) => setDelivery(Number(e.target.value))}
-            className="w-full p-4 rounded-2xl bg-black border border-gray-600 text-white"
-          >
-            <option value={3}>Standard Delivery £3</option>
-            <option value={5}>Tracked Delivery £5</option>
-          </select>
-        </div>
-
-        <div className="text-3xl font-black mt-5">
-          Total: £{total}
-        </div>
+      <section className="mt-6 text-center">
+        <div className="text-2xl font-bold">Total: £{total}</div>
       </section>
 
-      {/* WHATSAPP BUTTON */}
+      {/* BUTTONS */}
       {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 p-4">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-black border-t">
+
           <a
             href={whatsappLink}
             target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full max-w-md mx-auto bg-green-500 hover:bg-green-600 text-white font-black py-5 rounded-2xl text-xl text-center shadow-lg mb-2"
+            className="block bg-green-500 py-4 rounded-xl text-center font-bold mb-2"
           >
-            💬 Order Now on WhatsApp
+            💬 Order on WhatsApp
+          </a>
+
+          <a
+            href={messengerLink}
+            target="_blank"
+            className="block bg-blue-500 py-4 rounded-xl text-center font-bold mb-2"
+          >
+            💬 Message on Facebook
           </a>
 
           <a
             href={facebookPage}
             target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full max-w-md mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl text-center shadow-lg"
+            className="block bg-gray-700 py-3 rounded-xl text-center"
           >
-            👍 Visit Facebook Page
+            👍 View Facebook Page
           </a>
+
         </div>
       )}
     </div>
