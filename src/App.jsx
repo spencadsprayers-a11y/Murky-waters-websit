@@ -26,41 +26,48 @@ export default function App() {
     }
   };
 
+  const orderMessage =
+    selected.length > 0
+      ? `Hi, I would like to order these Fishing Glooze flavours: ${selected.join(
+          ", "
+        )} please.`
+      : "Hi, I would like to order Fishing Glooze please.";
+
+  const orderLink = `https://m.me/murkywaters?text=${encodeURIComponent(
+    orderMessage
+  )}`;
+
   return (
     <div className="bg-black text-white min-h-screen text-center p-6">
-      
-      {/* HEADER */}
-      <h1 className="text-4xl font-bold mb-2">Murky Waters</h1>
-      <h2 className="text-2xl text-pink-500 mb-4">Fishing Glooze</h2>
-      <p className="mb-4">Sticky. Strong. Irresistible.</p>
+      <h1 className="text-5xl font-bold mb-2">Murky Waters</h1>
+      <h2 className="text-3xl text-pink-500 mb-4">Fishing Glooze</h2>
+      <p className="mb-4 text-xl">Sticky. Strong. Irresistible.</p>
 
-      <h3 className="text-3xl text-yellow-400 mb-2">
+      <h3 className="text-4xl text-yellow-400 mb-2 font-bold">
         🔥 3 FOR £20 🔥
       </h3>
-      <p className="mb-6">Mix & Match Any Flavours</p>
+      <p className="mb-6 text-lg">Mix & Match Any Flavours</p>
 
       <a
         href="https://facebook.com/murkywaters"
         target="_blank"
-        className="bg-pink-500 px-6 py-3 rounded-lg inline-block mb-10"
+        className="bg-pink-500 px-8 py-4 rounded-xl inline-block mb-12 font-bold text-lg"
       >
         Message to Order
       </a>
 
-      {/* FULL RANGE IMAGE */}
-      <h2 className="text-3xl font-bold mb-4">Full Product Range</h2>
+      <h2 className="text-4xl font-bold mb-6">Full Product Range</h2>
 
       <img
         src="/images/Product-range.png"
         alt="Murky Waters Fishing Glooze range"
-        className="mx-auto mb-10 rounded-xl shadow-lg"
+        className="mx-auto mb-14 rounded-xl shadow-lg w-full max-w-4xl"
       />
 
-      {/* BUNDLE BUILDER */}
-      <h2 className="text-3xl font-bold mb-2">
+      <h2 className="text-4xl font-bold mb-2">
         Build Your 3 For £20 Bundle
       </h2>
-      <p className="mb-6">
+      <p className="mb-6 text-lg">
         Select up to 3 flavours, then press order.
       </p>
 
@@ -69,9 +76,9 @@ export default function App() {
           <button
             key={flavour}
             onClick={() => toggleFlavour(flavour)}
-            className={`p-4 rounded-lg border ${
+            className={`p-4 rounded-lg border font-bold ${
               selected.includes(flavour)
-                ? "bg-pink-500"
+                ? "bg-pink-500 border-pink-500"
                 : "bg-black border-gray-500"
             }`}
           >
@@ -80,15 +87,22 @@ export default function App() {
         ))}
       </div>
 
-      <p className="mt-6">Selected: {selected.length}/3</p>
+      <p className="mt-6 text-xl">Selected: {selected.length}/3</p>
 
-      {/* ORDER BUTTON */}
+      {selected.length > 0 && (
+        <p className="mt-3 text-yellow-400 font-bold">
+          {selected.join(" • ")}
+        </p>
+      )}
+
       <a
-        href={`https://facebook.com/murkywaters`}
+        href={orderLink}
         target="_blank"
-        className="bg-pink-500 px-6 py-3 rounded-lg inline-block mt-6"
+        className="bg-pink-500 px-8 py-4 rounded-xl inline-block mt-6 font-bold text-lg"
       >
-        Order Now
+        {selected.length === 3
+          ? "Order My 3 For £20"
+          : "Message to Order"}
       </a>
     </div>
   );
