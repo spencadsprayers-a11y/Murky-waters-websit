@@ -23,15 +23,26 @@ function orderLink(flavour) {
   )}`;
 }
 
+const buttonStyle = {
+  display: "inline-block",
+  marginTop: "18px",
+  background: "#ff3b7a",
+  color: "white",
+  padding: "15px 24px",
+  borderRadius: "14px",
+  textDecoration: "none",
+  fontWeight: "900",
+};
+
 export default function App() {
   return (
     <div style={{ background: "#050505", color: "white", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
 
-      <section style={{ padding: "70px 20px", textAlign: "center", background: "radial-gradient(circle at top, #3b0a24, #050505 60%)" }}>
-        <h1 style={{ fontSize: "52px", margin: 0 }}>Murky Waters</h1>
-        <h2 style={{ color: "#ff3b7a", fontSize: "30px" }}>Fishing Glooze</h2>
-        <p style={{ fontSize: "22px" }}>Sticky. Strong. Irresistible.</p>
-        <h2 style={{ color: "#ffd400", fontSize: "36px" }}>🔥 3 FOR £20 🔥</h2>
+      <section style={{ padding: "55px 20px", textAlign: "center", background: "radial-gradient(circle at top, #3b0a24, #050505 60%)" }}>
+        <h1 style={{ fontSize: "42px", margin: 0 }}>Murky Waters</h1>
+        <h2 style={{ color: "#ff3b7a", fontSize: "28px" }}>Fishing Glooze</h2>
+        <p style={{ fontSize: "20px" }}>Sticky. Strong. Irresistible.</p>
+        <h2 style={{ color: "#ffd400", fontSize: "32px" }}>🔥 3 FOR £20 🔥</h2>
         <p>Mix & Match Any Flavours</p>
         <a href={FACEBOOK_PAGE} style={buttonStyle}>Message to Order</a>
       </section>
@@ -62,52 +73,49 @@ export default function App() {
             }}>
 
               <div style={{
-                margin: "0 auto",
-                width: "120px",
-                height: "245px",
-                borderRadius: "38px",
+                margin: "0 auto 22px auto",
+                width: "90px",
+                height: "190px",
+                borderRadius: "30px",
                 background: "linear-gradient(#161616,#000)",
                 border: "3px solid #333",
                 position: "relative",
-                boxShadow: "inset 0 0 25px #555"
+                boxShadow: "inset 0 0 20px #555"
               }}>
                 <div style={{
                   position: "absolute",
-                  top: "-32px",
-                  left: "39px",
-                  width: "42px",
-                  height: "42px",
+                  top: "-22px",
+                  left: "26px",
+                  width: "36px",
+                  height: "36px",
                   background: "#111",
-                  borderRadius: "10px",
+                  borderRadius: "9px",
                   border: "2px solid #444"
                 }} />
 
                 <div style={{
                   position: "absolute",
-                  top: "38px",
-                  left: "10px",
-                  right: "10px",
-                  bottom: "15px",
-                  borderRadius: "15px",
+                  top: "30px",
+                  left: "8px",
+                  right: "8px",
+                  bottom: "12px",
+                  borderRadius: "13px",
                   border: `2px solid ${color}`,
-                  padding: "8px 5px",
+                  padding: "7px 4px",
                   background: "#050505"
                 }}>
-                  <div style={{ fontSize: "11px", fontWeight: "900" }}>Murky Waters</div>
-                  <div style={{ fontSize: "21px", fontWeight: "900", marginTop: "8px", lineHeight: "1" }}>
+                  <div style={{ fontSize: "9px", fontWeight: "900" }}>Murky Waters</div>
+                  <div style={{ fontSize: "16px", fontWeight: "900", marginTop: "6px", lineHeight: "1" }}>
                     FISHING<br />GLOOZE
                   </div>
-                  <div style={{ fontSize: "38px", marginTop: "12px" }}>{emoji}</div>
-                  <div style={{ color, fontWeight: "900", fontSize: "13px", lineHeight: "1.2", marginTop: "8px" }}>
+                  <div style={{ fontSize: "30px", marginTop: "10px" }}>{emoji}</div>
+                  <div style={{ color, fontWeight: "900", fontSize: "11px", lineHeight: "1.2", marginTop: "6px" }}>
                     {name}
-                  </div>
-                  <div style={{ marginTop: "12px", fontSize: "10px", border: "1px solid white", borderRadius: "20px", padding: "4px" }}>
-                    PVA FRIENDLY
                   </div>
                 </div>
               </div>
 
-              <h3 style={{ color, fontSize: "25px", marginBottom: "5px" }}>{name}</h3>
+              <h3 style={{ color, fontSize: "25px", margin: "8px 0 5px" }}>{name}</h3>
               <p style={{ color: "#ccc", marginTop: 0 }}>120ml screw cap spout</p>
               <p style={{ color: "#aaa" }}>PVA Friendly bait liquid</p>
 
@@ -129,14 +137,3 @@ export default function App() {
     </div>
   );
 }
-
-const buttonStyle = {
-  display: "inline-block",
-  marginTop: "18px",
-  background: "#ff3b7a",
-  color: "white",
-  padding: "15px 24px",
-  borderRadius: "14px",
-  textDecoration: "none",
-  fontWeight: "900",
-};
