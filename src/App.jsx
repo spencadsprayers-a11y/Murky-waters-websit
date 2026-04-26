@@ -79,7 +79,7 @@ export default function App() {
               className={`p-5 rounded-xl border text-lg font-bold transition ${
                 active
                   ? "bg-pink-500 border-pink-500 scale-105"
-                  : "bg-black border-gray-600"
+                  : "bg-black border-gray-600 hover:border-pink-500"
               }`}
             >
               {flavour}
@@ -88,7 +88,9 @@ export default function App() {
         })}
       </div>
 
-      <p className="mt-8 text-xl font-bold">Selected: {selected.length}/3</p>
+      <p className="mt-8 text-xl font-bold">
+        Selected: {selected.length}/3
+      </p>
 
       {selected.length > 0 && (
         <p className="mt-3 text-yellow-400 font-semibold">
@@ -100,11 +102,15 @@ export default function App() {
         href={orderLink}
         target="_blank"
         rel="noopener noreferrer"
-        className={`px-10 py-4 rounded-xl inline-block mt-8 font-bold text-lg shadow-lg ${
-          selected.length === 3 ? "bg-pink-500" : "bg-gray-600"
+        className={`px-10 py-4 rounded-xl inline-block mt-8 font-bold text-lg shadow-lg transition ${
+          selected.length === 3
+            ? "bg-pink-500 hover:bg-pink-600"
+            : "bg-gray-600 cursor-not-allowed"
         }`}
       >
-        {selected.length === 3 ? "🔥 Order My Bundle" : "Select 3 Flavours"}
+        {selected.length === 3
+          ? "🔥 Order My Bundle"
+          : "Select 3 Flavours"}
       </a>
     </div>
   );
