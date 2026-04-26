@@ -15,8 +15,7 @@ export default function App() {
     "Mulberry Zing": 0,
     "Strawberry Cream": 0,
     "Sweet Mango": 0,
-    "Peach": 0,
-    "Black Pepper": 0,
+    "Peach & Black Pepper": 0,
   });
 
   const [delivery, setDelivery] = useState(3);
