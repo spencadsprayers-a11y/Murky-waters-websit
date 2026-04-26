@@ -30,7 +30,6 @@ export default function App() {
 
   const bundles = Math.floor(totalItems / 3);
   const remainder = totalItems % 3;
-
   const productTotal =
     totalItems >= 3 ? bundles * 20 + remainder * 8 : totalItems * 8;
 
@@ -56,68 +55,135 @@ Ready to order 👍`;
   )}`;
 
   return (
-    <div className="bg-black text-white min-h-screen p-4 pb-8">
-      <h1 className="text-3xl font-bold text-center mb-2">
-        Fishing Glooze
-      </h1>
+    <div className="bg-black text-white min-h-screen px-4 pb-32">
+      <section className="text-center py-10 bg-gradient-to-b from-pink-950/50 to-black rounded-b-3xl">
+        <p className="text-pink-400 text-sm font-bold tracking-widest">
+          MURKY WATERS
+        </p>
 
-      <p className="text-center text-yellow-400 mb-6">
-        🔥 3 FOR £20 or £8 each 🔥
-      </p>
+        <h1 className="text-5xl font-black mt-2">Fishing Glooze</h1>
 
-      <div className="grid grid-cols-2 gap-4">
-        {products.map((product) => (
-          <div
-            key={product}
-            className="border border-gray-700 rounded-xl p-4 text-center"
-          >
-            <div className="mb-3 font-semibold">{product}</div>
+        <p className="text-gray-300 mt-3">
+          Sticky. Strong. Irresistible.
+        </p>
 
-            <div className="flex justify-center items-center gap-3">
-              <button
-                onClick={() => updateQty(product, -1)}
-                className="bg-gray-700 px-3 py-1 rounded"
-              >
-                -
-              </button>
+        <div className="inline-block bg-yellow-400 text-black px-6 py-3 rounded-2xl font-black text-2xl mt-5 shadow-lg">
+          🔥 3 FOR £20 🔥
+        </div>
 
-              <span>{quantities[product]}</span>
+        <p className="text-gray-400 mt-2">or £8 each</p>
 
-              <button
-                onClick={() => updateQty(product, 1)}
-                className="bg-pink-500 px-3 py-1 rounded"
-              >
-                +
-              </button>
+        <p className="text-green-400 text-sm mt-3 font-bold">
+          Save £4 when you buy 3
+        </p>
+
+        <p className="text-red-400 text-sm mt-2">
+          ⚡ Limited stock — popular flavours sell fast
+        </p>
+      </section>
+
+      <section className="py-6">
+        <img
+          src="/images/Product-range.png"
+          alt="Murky Waters Fishing Glooze range"
+          className="mx-auto rounded-2xl shadow-2xl border border-white/10 w-full max-w-5xl"
+        />
+      </section>
+
+      <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4 shadow-2xl">
+        <h2 className="text-3xl font-black text-center mb-2">
+          Build Your Order
+        </h2>
+
+        <p className="text-center text-gray-400 mb-5">
+          Add any flavour. Mix & match or choose 3 of the same.
+        </p>
+
+        <div className="grid grid-cols-2 gap-4">
+          {products.map((product) => (
+            <div
+              key={product}
+              className={`rounded-2xl p-4 text-center border transition ${
+                quantities[product] > 0
+                  ? "border-pink-500 shadow-lg shadow-pink-500/20"
+                  : "border-gray-700"
+              }`}
+            >
+              <div className="mb-4 font-bold text-lg">{product}</div>
+
+              <div className="flex justify-center items-center gap-4">
+                <button
+                  onClick={() => updateQty(product, -1)}
+                  className="bg-gray-700 px-4 py-2 rounded-xl font-bold"
+                >
+                  -
+                </button>
+
+                <span className="text-xl font-black">
+                  {quantities[product]}
+                </span>
+
+                <button
+                  onClick={() => updateQty(product, 1)}
+                  className="bg-pink-500 px-4 py-2 rounded-xl font-bold"
+                >
+                  +
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </section>
 
-      <div className="mt-6">
-        <label className="block mb-2 text-sm">Delivery</label>
-        <select
-          value={delivery}
-          onChange={(e) => setDelivery(Number(e.target.value))}
-          className="w-full p-3 rounded bg-black border border-gray-600"
-        >
-          <option value={3}>Standard £3</option>
-          <option value={5}>Tracked £5</option>
-        </select>
-      </div>
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
+        <p className="text-gray-400">
+          {totalItems} item{totalItems !== 1 && "s"} selected
+        </p>
 
-      <div className="text-xl font-bold mt-4 text-center">
-        Total: £{total}
-      </div>
+        {totalItems > 0 && totalItems < 3 && (
+          <p className="text-yellow-400 text-sm mt-2">
+            Add {3 - totalItems} more to unlock 3 for £20
+          </p>
+        )}
 
-      <a
-        href={whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg mt-4 text-center"
-      >
-        Order via WhatsApp
-      </a>
+        {totalItems >= 3 && (
+          <p className="text-green-400 font-bold mt-2">
+            🎉 3 for £20 deal applied!
+          </p>
+        )}
+
+        <div className="mt-5">
+          <label className="block mb-2 text-sm text-gray-400">
+            Delivery option
+          </label>
+
+          <select
+            value={delivery}
+            onChange={(e) => setDelivery(Number(e.target.value))}
+            className="w-full p-4 rounded-2xl bg-black border border-gray-600 text-white"
+          >
+            <option value={3}>Standard Delivery £3</option>
+            <option value={5}>Tracked Delivery £5</option>
+          </select>
+        </div>
+
+        <div className="text-3xl font-black mt-5">
+          Total: £{total}
+        </div>
+      </section>
+
+      {totalItems > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 p-4">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full max-w-md mx-auto bg-green-500 hover:bg-green-600 text-white font-black py-5 rounded-2xl text-xl text-center shadow-lg"
+          >
+            💬 Order Now on WhatsApp
+          </a>
+        </div>
+      )}
     </div>
   );
 }
