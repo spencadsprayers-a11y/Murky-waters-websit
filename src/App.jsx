@@ -14,6 +14,9 @@ export default function App() {
     "Maple / Mulberry": 0,
     "Mulberry Zing": 0,
     "Strawberry Cream": 0,
+    "Sweet Mango": 0,
+    "Peach": 0,
+    "Black Pepper": 0,
   });
 
   const [delivery, setDelivery] = useState(3);
@@ -30,6 +33,7 @@ export default function App() {
 
   const bundles = Math.floor(totalItems / 3);
   const remainder = totalItems % 3;
+
   const productTotal =
     totalItems >= 3 ? bundles * 20 + remainder * 8 : totalItems * 8;
 
@@ -56,6 +60,8 @@ Ready to order 👍`;
 
   return (
     <div className="bg-black text-white min-h-screen px-4 pb-32">
+
+      {/* HEADER */}
       <section className="text-center py-10 bg-gradient-to-b from-pink-950/50 to-black rounded-b-3xl">
         <p className="text-pink-400 text-sm font-bold tracking-widest">
           MURKY WATERS
@@ -82,6 +88,7 @@ Ready to order 👍`;
         </p>
       </section>
 
+      {/* IMAGE */}
       <section className="py-6">
         <img
           src="/images/Product-range.png"
@@ -90,13 +97,14 @@ Ready to order 👍`;
         />
       </section>
 
+      {/* PRODUCTS */}
       <section className="bg-zinc-950 border border-white/10 rounded-3xl p-4 shadow-2xl">
         <h2 className="text-3xl font-black text-center mb-2">
           Build Your Order
         </h2>
 
         <p className="text-center text-gray-400 mb-5">
-          Add any flavour. Mix & match or choose 3 of the same.
+          Mix & match or choose multiple of the same flavour
         </p>
 
         <div className="grid grid-cols-2 gap-4">
@@ -135,6 +143,7 @@ Ready to order 👍`;
         </div>
       </section>
 
+      {/* SUMMARY */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
         <p className="text-gray-400">
           {totalItems} item{totalItems !== 1 && "s"} selected
@@ -172,6 +181,7 @@ Ready to order 👍`;
         </div>
       </section>
 
+      {/* WHATSAPP BUTTON */}
       {totalItems > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 p-4">
           <a
