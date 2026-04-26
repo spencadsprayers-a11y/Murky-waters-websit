@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const flavours = [
+const products = [
   "Pineapple Dream",
   "Tigernut Extract",
   "Squid & Octopus",
@@ -12,122 +12,156 @@ const flavours = [
   "Maple Cream",
   "Maple / Mulberry",
   "Mulberry Zing",
-  "Strawberry Cream",
+  "Strawberry Cream"
 ];
 
 export default function App() {
-  const [cart, setCart] = useState([]);
-  const [delivery, setDelivery] = useState("standard");
+  const [cart, setCart] = useState(
+    Object.fromEntries(products.map(p => [p, 0]))
+  );
 
-  const addFlavour = (f) => setCart([...cart, f]);
-
-  const removeFlavour = (f) => {
-    const i = cart.indexOf(f);
-    if (i > -1) {
-      const newArr = [...cart];
-      newArr.splice(i, 1);
-      setCart(newArr);
-    }
+  const updateQty = (product, change) => {
+    setCart(prev => ({
+      ...prev,
+      [product]: Math.max(0, prev[product] + change)
+    }));
   };
 
-  const countFlavour = (f) => cart.filter((x) => x === f).length;
+  const items = Object.values(cart).reduce((a, b) => a + b, 0);
 
-  const items = cart.length;
+  // PRICING
+  const bundles = Math.floor(items / 3);
+  const remainder = items % 3;
+  const productTotal = bundles * 20 + remainder * 8;
 
-  const productPrice =
-    items >= 3
-      ? Math.floor(items / 3) * 20 + (items % 3) * 8
-      : items * 8;
+  // DELIVERY
+  const deliveryCost = items === 0 ? 0 : items >= 4 ? 0 : 3;
+  const total = productTotal + deliveryCost;
 
-  const deliveryCost =
-    delivery === "free" ? 0 : items >= 4 ? 0 : 3;
+  // ORDER TEXT
+  const orderItems = Object.entries(cart)
+    .filter(([_, qty]) => qty > 0)
+    .map(([name, qty]) => `${name} x${qty}`)
+    .join(", ");
 
-  const total = productPrice + deliveryCost;
-
-  const orderMessage =
-    cart.length > 0
-      ? `Hi, I’d like: ${cart.join(", ")} | Total £${total} | Delivery: ${delivery}`
-      : "Hi, I’m interested in Fishing Glooze";
-
-  const facebookLink = `https://m.me/YOURPAGE?text=${encodeURIComponent(orderMessage)}`;
-
-  const paypalLink = "PASTE_YOUR_PAYPAL_LINK_HERE";
+  const facebookLink = `https://m.me/YOURFACEBOOK?text=Hi, I’d like to order: ${encodeURIComponent(orderItems)} (Total £${total})`;
 
   return (
-    <div className="bg-black text-white min-h-screen px-4 pb-32 text-center">
+    <div className="bg-black text-white min-h-screen p-4 max-w-xl mx-auto pb-32">
 
-      <h1 className="text-4xl font-black py-6">Fishing Glooze</h1>
+      {/* HEADER */}
+      <h1 className="text-4xl font-black py-4 text-center">
+        Fishing Glooze
+      </h1>
 
-      <p className="text-yellow-400 font-bold">
+      <p className="text-center text-gray-300">
+        Sticky. Strong. Irresistible.
+      </p>
+
+      <p className="text-center text-yellow-400 font-bold text-xl mt-2">
         🔥 3 FOR £20 or £8 each 🔥
+      </p>
+
+      <p className="text-center text-sm text-gray-400 mb-6">
+        Mix & match any flavours
       </p>
 
       {/* IMAGE */}
       <img
         src="/images/Product-range.png"
-        className="mx-auto my-6 max-w-4xl rounded-xl"
+        alt="range"
+        className="mx-auto mb-6 rounded-2xl shadow-lg"
       />
 
-      {/* SHOP */}
-      <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
-        {flavours.map((f) => {
-          const count = countFlavour(f);
+      {/* PRODUCTS */}
+      <div className="grid grid-cols-2 gap-3">
+        {products.map(product => (
+          <div
+            key={product}
+            className="border border-gray-700 rounded-2xl p-3 text-center"
+          >
+            <p className="mb-2 text-sm font-semibold">{product}</p>
 
-          return (
-            <div key={f} className="border p-3 rounded-xl">
-              <p className="font-bold">{f}</p>
+            <div className="flex justify-center items-center gap-2">
+              <button
+                onClick={() => updateQty(product, -1)}
+                className="bg-gray-700 px-3 py-1 rounded-lg"
+              >
+                -
+              </button>
 
-              <div className="flex justify-center gap-2 mt-2">
-                <button onClick={() => removeFlavour(f)} className="bg-gray-700 px-2">-</button>
-                <span>{count}</span>
-                <button onClick={() => addFlavour(f)} className="bg-pink-500 px-2">+</button>
-              </div>
+              <span className="w-6">{cart[product]}</span>
+
+              <button
+                onClick={() => updateQty(product, 1)}
+                className="bg-pink-500 px-3 py-1 rounded-lg"
+              >
+                +
+              </button>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
 
-      {/* DELIVERY */}
-      <div className="mt-6 bg-zinc-900 p-4 rounded-xl max-w-md mx-auto">
-        <p className="font-bold mb-2">Delivery</p>
+      {/* SUMMARY */}
+      {items > 0 && (
+        <div className="mt-6 text-center">
 
-        <select
-          value={delivery}
-          onChange={(e) => setDelivery(e.target.value)}
-          className="text-black p-2 rounded"
-        >
-          <option value="standard">Standard £3</option>
-          <option value="free">Free (orders £30+)</option>
-        </select>
-      </div>
+          <p className="text-sm text-gray-400">
+            {items} item{items !== 1 && "s"} selected
+          </p>
 
-      {/* TOTAL */}
-      <div className="mt-4 text-xl font-bold">
-        Total: £{total}
-      </div>
+          {items < 3 && (
+            <p className="text-yellow-400 text-sm mt-1">
+              Add {3 - items} more to unlock 3 for £20
+            </p>
+          )}
 
-      {/* ACTIONS */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-black border-t">
+          <div className="mt-4 p-4 bg-gray-900 rounded-2xl">
+            <p className="text-sm text-gray-400">
+              {deliveryCost === 0
+                ? "🚚 Free Delivery"
+                : "🚚 Delivery £3"}
+            </p>
+          </div>
 
-        {/* PAYPAL */}
-        <a
-          href={paypalLink}
-          target="_blank"
-          className="block bg-yellow-400 text-black font-bold py-3 rounded-xl mb-2"
-        >
-          Pay with PayPal (£{total})
-        </a>
+          <div className="mt-4 text-2xl font-bold">
+            Total: £{total}
+          </div>
 
-        {/* FACEBOOK */}
-        <a
-          href={facebookLink}
-          target="_blank"
-          className="block bg-pink-500 py-3 rounded-xl font-bold"
-        >
-          Order via Facebook
-        </a>
+          <p className="text-red-400 text-sm mt-2">
+            ⚡ Limited stock – popular flavours sell fast
+          </p>
+        </div>
+      )}
 
-      </div>
+      {/* BUTTONS */}
+      {items > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-black border-t border-gray-800">
+
+          {/* STRIPE */}
+          <a
+            href="https://buy.stripe.com/6oU9AVgFhdWx3jx71U9AA00"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block bg-white text-black font-bold py-4 rounded-2xl text-center shadow-lg mb-2"
+          >
+            Pay securely (Apple Pay / Google Pay / Card)
+          </a>
+
+          {/* FACEBOOK */}
+          <a
+            href={facebookLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block bg-pink-500 py-4 rounded-2xl text-center font-bold shadow-lg"
+          >
+            Order via Facebook
+          </a>
+
+        </div>
+      )}
+
     </div>
   );
 }
