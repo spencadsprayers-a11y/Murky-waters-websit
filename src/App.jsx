@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export default function App() {
-
   const [quantities, setQuantities] = useState({
     "Pineapple Dream": 0,
     "Tigernut Extract": 0,
@@ -20,42 +19,47 @@ export default function App() {
   const [delivery, setDelivery] = useState(3);
 
   const updateQty = (item, change) => {
-    setQuantities(prev => ({
+    setQuantities((prev) => ({
       ...prev,
-      [item]: Math.max(0, prev[item] + change)
+      [item]: Math.max(0, prev[item] + change),
     }));
   };
 
+  const products = Object.keys(quantities);
   const totalItems = Object.values(quantities).reduce((a, b) => a + b, 0);
 
-  let productTotal = 0;
-
-  if (totalItems >= 3) {
-    const bundles = Math.floor(totalItems / 3);
-    const remainder = totalItems % 3;
-    productTotal = bundles * 20 + remainder * 8;
-  } else {
-    productTotal = totalItems * 8;
-  }
+  const bundles = Math.floor(totalItems / 3);
+  const remainder = totalItems % 3;
+  const productTotal =
+    totalItems >= 3 ? bundles * 20 + remainder * 8 : totalItems * 8;
 
   const total = productTotal + delivery;
 
-  const handleWhatsAppOrder = () => {
-    const selected = Object.entries(quantities)
-      .filter(([_, qty]) => qty > 0)
-      .map(([name, qty]) => `${name} x${qty}`)
-      .join("%0A");
+  const selectedText = Object.entries(quantities)
+    .filter(([_, qty]) => qty > 0)
+    .map(([name, qty]) => `${name} x${qty}`)
+    .join("\n");
 
-    const message = `🔥 Murky Waters Order 🔥%0A%0A${selected}%0A%0AItems: ${totalItems}%0ATotal: £${total}%0ADelivery: £${delivery}%0A%0AReady to order 👍`;
+  const message = `🔥 Murky Waters Order 🔥
 
-    window.open(`https://wa.me/447519223822?text=${message}`, "_blank");
-  };
+${selectedText}
 
-  const products = Object.keys(quantities);
+Items: ${totalItems}
+Delivery: £${delivery}
+Total: £${total}
+
+Ready to order 👍`;
+
+  const whatsappLink = `https://wa.me/447519223822?text=${encodeURIComponent(
+    message
+  )}`;
+
+  const facebookLink = `https://m.me/murkywaters?text=${encodeURIComponent(
+    message
+  )}`;
 
   return (
-    <div className="bg-black text-white min-h-screen p-4">
-
+    <div className="bg-black text-white min-h-screen p-4 pb-8">
       <h1 className="text-3xl font-bold text-center mb-2">
         Fishing Glooze
       </h1>
@@ -64,11 +68,12 @@ export default function App() {
         🔥 3 FOR £20 or £8 each 🔥
       </p>
 
-      {/* PRODUCT GRID */}
       <div className="grid grid-cols-2 gap-4">
-        {products.map(product => (
-          <div key={product} className="border border-gray-700 rounded-xl p-4 text-center">
-
+        {products.map((product) => (
+          <div
+            key={product}
+            className="border border-gray-700 rounded-xl p-4 text-center"
+          >
             <div className="mb-3 font-semibold">{product}</div>
 
             <div className="flex justify-center items-center gap-3">
@@ -88,12 +93,10 @@ export default function App() {
                 +
               </button>
             </div>
-
           </div>
         ))}
       </div>
 
-      {/* DELIVERY */}
       <div className="mt-6">
         <label className="block mb-2 text-sm">Delivery</label>
         <select
@@ -106,19 +109,27 @@ export default function App() {
         </select>
       </div>
 
-      {/* TOTAL */}
       <div className="text-xl font-bold mt-4 text-center">
         Total: £{total}
       </div>
 
-      {/* WHATSAPP BUTTON */}
-      <button
-        onClick={handleWhatsAppOrder}
-        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg mt-4"
+      <a
+        href={whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg mt-4 text-center"
       >
         Order via WhatsApp
-      </button>
+      </a>
 
+      <a
+        href={facebookLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg mt-3 text-center"
+      >
+        Message us on Facebook
+      </a>
     </div>
   );
 }
