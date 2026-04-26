@@ -64,7 +64,7 @@ export default function App() {
         <h2 style={{ fontSize: "36px" }}>Full Product Range</h2>
 
         <img
-          src="/public/images/product-range.png"
+          src="/images/product-range.png"
           alt="Murky Waters Fishing Glooze range"
           style={{
             width: "100%",
