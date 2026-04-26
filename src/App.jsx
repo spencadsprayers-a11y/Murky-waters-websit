@@ -38,19 +38,33 @@ export default function App() {
   return (
     <div style={{ background: "#050505", color: "white", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
 
-      <section style={{ padding: "65px 20px", textAlign: "center", background: "radial-gradient(circle at top, #4a0b2f, #050505 60%)" }}>
+      {/* HERO */}
+      <section style={{
+        padding: "65px 20px",
+        textAlign: "center",
+        background: "radial-gradient(circle at top, #4a0b2f, #050505 60%)"
+      }}>
         <h1 style={{ fontSize: "48px", margin: 0, fontWeight: "900" }}>Murky Waters</h1>
         <h2 style={{ color: "#ff3b7a", fontSize: "32px" }}>Fishing Glooze</h2>
         <p style={{ fontSize: "22px" }}>Sticky. Strong. Irresistible.</p>
-        <h2 style={{ color: "#ffd400", fontSize: "38px" }}>🔥 3 FOR £20 🔥</h2>
+
+        <h2 style={{ color: "#ffd400", fontSize: "38px" }}>
+          🔥 3 FOR £20 🔥
+        </h2>
+
         <p>Mix & Match Any Flavours</p>
-        <a href={FACEBOOK_PAGE} style={buttonStyle}>Message to Order</a>
+
+        <a href={FACEBOOK_PAGE} style={buttonStyle}>
+          Message to Order
+        </a>
       </section>
 
+      {/* PRODUCT IMAGE */}
       <section style={{ padding: "45px 20px", textAlign: "center" }}>
         <h2 style={{ fontSize: "36px" }}>Full Product Range</h2>
+
         <img
-          src="/images/product-range.png"
+          src="/public/images/product-range.png"
           alt="Murky Waters Fishing Glooze range"
           style={{
             width: "100%",
@@ -60,8 +74,15 @@ export default function App() {
             border: "1px solid #333"
           }}
         />
+
+        <br />
+
+        <a href={orderLink} style={buttonStyle}>
+          Order Now
+        </a>
       </section>
 
+      {/* BUNDLE BUILDER */}
       <section style={{ padding: "45px 20px", background: "#111", textAlign: "center" }}>
         <h2 style={{ fontSize: "34px" }}>Build Your 3 For £20 Bundle</h2>
         <p style={{ color: "#ccc" }}>Select up to 3 flavours, then press order.</p>
@@ -110,6 +131,7 @@ export default function App() {
         </a>
       </section>
 
+      {/* WHY */}
       <section style={{ padding: "45px 20px", textAlign: "center" }}>
         <h2>Why Choose Fishing Glooze?</h2>
         <p style={{ color: "#ccc", lineHeight: "1.8" }}>
@@ -117,10 +139,14 @@ export default function App() {
         </p>
       </section>
 
+      {/* CTA */}
       <section style={{ padding: "55px 20px", background: "#111", textAlign: "center" }}>
         <h2 style={{ fontSize: "34px" }}>Ready To Catch More?</h2>
         <p>Message Murky Waters on Facebook to order today.</p>
-        <a href={FACEBOOK_PAGE} style={buttonStyle}>Message on Facebook</a>
+
+        <a href={FACEBOOK_PAGE} style={buttonStyle}>
+          Message on Facebook
+        </a>
       </section>
 
     </div>
