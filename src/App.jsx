@@ -1,153 +1,123 @@
 import { useState } from "react";
 
-const products = [
-  "Pineapple Dream",
-  "Tigernut Extract",
-  "Squid & Octopus",
-  "Bloodworm Extract",
-  "Pure Calanus Extract",
-  "Tutti Sweet Amino",
-  "Plum Sauce",
-  "Robin / Garlic",
-  "Maple Cream",
-  "Maple / Mulberry",
-  "Mulberry Zing",
-  "Strawberry Cream"
-];
-
 export default function App() {
-  const [cart, setCart] = useState(
-    Object.fromEntries(products.map(p => [p, 0]))
-  );
 
-  const updateQty = (product, change) => {
-    setCart(prev => ({
+  const [quantities, setQuantities] = useState({
+    "Pineapple Dream": 0,
+    "Tigernut Extract": 0,
+    "Squid & Octopus": 0,
+    "Bloodworm Extract": 0,
+    "Pure Calanus Extract": 0,
+    "Tutti Sweet Amino": 0,
+    "Plum Sauce": 0,
+    "Robin / Garlic": 0,
+    "Maple Cream": 0,
+    "Maple / Mulberry": 0,
+    "Mulberry Zing": 0,
+    "Strawberry Cream": 0,
+  });
+
+  const [delivery, setDelivery] = useState(3);
+
+  const updateQty = (item, change) => {
+    setQuantities(prev => ({
       ...prev,
-      [product]: Math.max(0, prev[product] + change)
+      [item]: Math.max(0, prev[item] + change)
     }));
   };
 
-  const items = Object.values(cart).reduce((a, b) => a + b, 0);
+  const totalItems = Object.values(quantities).reduce((a, b) => a + b, 0);
 
-  // PRICING
-  const bundles = Math.floor(items / 3);
-  const remainder = items % 3;
-  const productTotal = bundles * 20 + remainder * 8;
+  let productTotal = 0;
 
-  // DELIVERY
-  const deliveryCost = items === 0 ? 0 : items >= 4 ? 0 : 3;
-  const total = productTotal + deliveryCost;
+  if (totalItems >= 3) {
+    const bundles = Math.floor(totalItems / 3);
+    const remainder = totalItems % 3;
+    productTotal = bundles * 20 + remainder * 8;
+  } else {
+    productTotal = totalItems * 8;
+  }
 
-  // ORDER TEXT
-  const orderItems = Object.entries(cart)
-    .filter(([_, qty]) => qty > 0)
-    .map(([name, qty]) => `${name} x${qty}`)
-    .join(", ");
+  const total = productTotal + delivery;
 
-  const facebookLink = `https://m.me/YOURFACEBOOK?text=Hi, I’d like to order: ${encodeURIComponent(orderItems)} (Total £${total})`;
+  const handleWhatsAppOrder = () => {
+    const selected = Object.entries(quantities)
+      .filter(([_, qty]) => qty > 0)
+      .map(([name, qty]) => `${name} x${qty}`)
+      .join("%0A");
+
+    const message = `🔥 Murky Waters Order 🔥%0A%0A${selected}%0A%0AItems: ${totalItems}%0ATotal: £${total}%0ADelivery: £${delivery}%0A%0AReady to order 👍`;
+
+    window.open(`https://wa.me/447519223822?text=${message}`, "_blank");
+  };
+
+  const products = Object.keys(quantities);
 
   return (
-    <div className="bg-black text-white min-h-screen p-4 max-w-xl mx-auto pb-32">
+    <div className="bg-black text-white min-h-screen p-4">
 
-      {/* HEADER */}
-      <h1 className="text-4xl font-black py-4 text-center">
+      <h1 className="text-3xl font-bold text-center mb-2">
         Fishing Glooze
       </h1>
 
-      <p className="text-center text-gray-300">
-        Sticky. Strong. Irresistible.
-      </p>
-
-      <p className="text-center text-yellow-400 font-bold text-xl mt-2">
+      <p className="text-center text-yellow-400 mb-6">
         🔥 3 FOR £20 or £8 each 🔥
       </p>
 
-      <p className="text-center text-sm text-gray-400 mb-6">
-        Mix & match any flavours
-      </p>
-
-      {/* IMAGE */}
-      <img
-        src="/images/Product-range.png"
-        alt="range"
-        className="mx-auto mb-6 rounded-2xl shadow-lg"
-      />
-
-      {/* PRODUCTS */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* PRODUCT GRID */}
+      <div className="grid grid-cols-2 gap-4">
         {products.map(product => (
-          <div
-            key={product}
-            className="border border-gray-700 rounded-2xl p-3 text-center"
-          >
-            <p className="mb-2 text-sm font-semibold">{product}</p>
+          <div key={product} className="border border-gray-700 rounded-xl p-4 text-center">
 
-            <div className="flex justify-center items-center gap-2">
+            <div className="mb-3 font-semibold">{product}</div>
+
+            <div className="flex justify-center items-center gap-3">
               <button
                 onClick={() => updateQty(product, -1)}
-                className="bg-gray-700 px-3 py-1 rounded-lg"
+                className="bg-gray-700 px-3 py-1 rounded"
               >
                 -
               </button>
 
-              <span className="w-6">{cart[product]}</span>
+              <span>{quantities[product]}</span>
 
               <button
                 onClick={() => updateQty(product, 1)}
-                className="bg-pink-500 px-3 py-1 rounded-lg"
+                className="bg-pink-500 px-3 py-1 rounded"
               >
                 +
               </button>
             </div>
+
           </div>
         ))}
       </div>
 
-      {/* SUMMARY */}
-      {items > 0 && (
-        <div className="mt-6 text-center">
+      {/* DELIVERY */}
+      <div className="mt-6">
+        <label className="block mb-2 text-sm">Delivery</label>
+        <select
+          value={delivery}
+          onChange={(e) => setDelivery(Number(e.target.value))}
+          className="w-full p-3 rounded bg-black border border-gray-600"
+        >
+          <option value={3}>Standard £3</option>
+          <option value={5}>Tracked £5</option>
+        </select>
+      </div>
 
-          <p className="text-sm text-gray-400">
-            {items} item{items !== 1 && "s"} selected
-          </p>
+      {/* TOTAL */}
+      <div className="text-xl font-bold mt-4 text-center">
+        Total: £{total}
+      </div>
 
-          {items < 3 && (
-            <p className="text-yellow-400 text-sm mt-1">
-              Add {3 - items} more to unlock 3 for £20
-            </p>
-          )}
-
-          <div className="mt-4 p-4 bg-gray-900 rounded-2xl">
-            <p className="text-sm text-gray-400">
-              {deliveryCost === 0
-                ? "🚚 Free Delivery"
-                : "🚚 Delivery £3"}
-            </p>
-          </div>
-
-          <div className="mt-4 text-2xl font-bold">
-            Total: £{total}
-          </div>
-
-          <p className="text-red-400 text-sm mt-2">
-            ⚡ Limited stock – popular flavours sell fast
-          </p>
-        </div>
-      )}
-
-      {/* FACEBOOK BUTTON ONLY */}
-      {items > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-black border-t border-gray-800">
-          <a
-            href={facebookLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-pink-500 py-4 rounded-2xl text-center font-bold shadow-lg"
-          >
-            Order via Facebook
-          </a>
-        </div>
-      )}
+      {/* WHATSAPP BUTTON */}
+      <button
+        onClick={handleWhatsAppOrder}
+        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg mt-4"
+      >
+        Order via WhatsApp
+      </button>
 
     </div>
   );
