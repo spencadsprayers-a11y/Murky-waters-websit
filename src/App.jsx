@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const FACEBOOK_PAGE = "https://www.facebook.com/share/18jdHNeNu4/";
+
 export default function App() {
   const [discountCode, setDiscountCode] = useState("");
 
@@ -27,6 +29,13 @@ export default function App() {
     "Sweet Mango": 0,
     "Peach & Black Pepper": 0,
   });
+
+  const badges = {
+    "Pineapple Dream": "Best Seller",
+    "Sweet Mango": "Fruity Favourite",
+    "Squid & Octopus": "Savoury Hit",
+    "Peach & Black Pepper": "New Flavour",
+  };
 
   const updateQty = (item, change) => {
     setQuantities((prev) => ({
@@ -98,7 +107,9 @@ ${customerText}`;
 
         <h1 className="text-5xl font-black mt-2">Fishing Glooze</h1>
 
-        <p className="text-gray-300 mt-3">Sticky. Strong. Irresistible.</p>
+        <p className="text-gray-300 mt-3">
+          2 years field tested. Premium food sources. Built for results.
+        </p>
 
         <div className="inline-block bg-yellow-400 text-black px-6 py-3 rounded-2xl font-black text-2xl mt-5 shadow-lg">
           🔥 3 FOR £20 🔥
@@ -106,13 +117,60 @@ ${customerText}`;
 
         <p className="text-gray-400 mt-2">or £8 each</p>
         <p className="text-gray-400">+ £3.50 UK postage</p>
+
+        <a
+          href={FACEBOOK_PAGE}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full max-w-md mx-auto bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl mt-5 text-center"
+        >
+          👍 Visit Our Facebook Page
+        </a>
+      </section>
+
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
+        <h2 className="text-3xl font-black mb-3">Why Murky Waters?</h2>
+        <p className="text-gray-300">
+          Every bottle is built around high-quality ingredients, proven food sources and real on-the-bank testing. No gimmicks — just serious attraction.
+        </p>
+
+        <div className="grid grid-cols-2 gap-3 mt-5 text-sm">
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            ✅ PVA Friendly
+          </div>
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            ✅ Premium Ingredients
+          </div>
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            ✅ Field Tested
+          </div>
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            ✅ Cheshire 40lber Proof
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
+        <h2 className="text-3xl font-black mb-3">How To Order</h2>
+
+        <div className="grid gap-3 text-left text-sm">
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            1️⃣ Pick your flavours
+          </div>
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            2️⃣ Add your delivery details
+          </div>
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            3️⃣ Send your order on WhatsApp
+          </div>
+        </div>
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black mb-3">Join The Murky Waters Team</h2>
 
         <p className="text-gray-300 mb-4">
-          Approved Murky Waters team members receive 20% off product orders.
+          We’re building a small team of trusted anglers to represent Murky Waters on the bank.
         </p>
 
         <div className="grid gap-3 text-left text-sm">
@@ -141,7 +199,10 @@ ${customerText}`;
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-4">
-        <h2 className="text-3xl font-black text-center mb-5">Build Your Order</h2>
+        <h2 className="text-3xl font-black text-center mb-2">Build Your Order</h2>
+        <p className="text-gray-400 text-center mb-5">
+          Mix & match, or choose multiple of the same flavour.
+        </p>
 
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
@@ -153,6 +214,12 @@ ${customerText}`;
                   : "border-gray-700"
               }`}
             >
+              {badges[product] && (
+                <div className="inline-block bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full mb-2">
+                  {badges[product]}
+                </div>
+              )}
+
               <div className="mb-3 font-bold">{product}</div>
 
               <div className="flex justify-center items-center gap-4">
@@ -259,6 +326,32 @@ ${customerText}`;
 
         <div className="text-5xl font-black text-green-400 mt-5">
           £{finalTotal.toFixed(2)}
+        </div>
+      </section>
+
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
+        <h2 className="text-3xl font-black text-center mb-4">FAQ</h2>
+
+        <div className="space-y-3 text-sm text-gray-300">
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <strong>Is it PVA friendly?</strong>
+            <p>Yes — Fishing Glooze is designed to be PVA friendly.</p>
+          </div>
+
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <strong>Can I buy 3 of the same flavour?</strong>
+            <p>Yes — mix & match or choose multiples of the same flavour.</p>
+          </div>
+
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <strong>How much is postage?</strong>
+            <p>UK postage is £3.50.</p>
+          </div>
+
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            <strong>How do I use it?</strong>
+            <p>Add directly onto boilies, pellets, hookbaits, spod mix or groundbait.</p>
+          </div>
         </div>
       </section>
 
