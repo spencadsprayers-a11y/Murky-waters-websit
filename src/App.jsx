@@ -1,8 +1,5 @@
 import { useState } from "react";
 
-const STRIPE_SINGLE = "https://buy.stripe.com/9B65kF3Sv19L07l4TM9AA03";
-const STRIPE_BUNDLE = "https://buy.stripe.com/aFa00l60D9Ghf2f71U9AA04";
-
 export default function App() {
   const [customer, setCustomer] = useState({
     name: "",
@@ -68,7 +65,7 @@ Notes: ${customer.notes || "None"}`;
 ${selectedText}
 
 Items: ${totalItems}
-Total Paid: £${total.toFixed(2)}
+Total: £${total.toFixed(2)}
 
 Customer Details:
 ${customerText}`;
@@ -77,20 +74,12 @@ ${customerText}`;
     whatsappMessage
   )}`;
 
-  const handleStripeCheckout = () => {
-    if (totalItems === 0) return;
-
-    if (totalItems % 3 === 0) {
-      window.open(STRIPE_BUNDLE, "_blank");
-    } else {
-      window.open(STRIPE_SINGLE, "_blank");
-    }
-  };
+  const teamLink = `https://wa.me/447519223822?text=${encodeURIComponent(
+    "Hi, I’m interested in joining the Murky Waters team and applying for the team discount."
+  )}`;
 
   return (
-    <div className="bg-black text-white min-h-screen px-4 pb-44">
-
-      {/* HEADER */}
+    <div className="bg-black text-white min-h-screen px-4 pb-36">
       <section className="text-center py-10 bg-gradient-to-b from-pink-950/50 to-black rounded-b-3xl">
         <p className="text-pink-400 text-sm font-bold tracking-widest">
           MURKYWATERS
@@ -115,19 +104,18 @@ ${customerText}`;
         </p>
       </section>
 
-      {/* TEAM SECTION */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black mb-3">
-          Join The Murky Waters Team
+          Team Discount
         </h2>
 
         <p className="text-gray-300 mb-4">
-          We’re building a small team of trusted anglers to represent Murky Waters on the bank.
+          Approved Murky Waters team members receive 20% off orders.
         </p>
 
         <div className="grid gap-3 text-left text-sm">
           <div className="bg-black rounded-2xl p-4 border border-white/10">
-            ✅ 20% team discount on orders
+            ✅ 20% off team member orders
           </div>
 
           <div className="bg-black rounded-2xl p-4 border border-white/10">
@@ -135,23 +123,28 @@ ${customerText}`;
           </div>
 
           <div className="bg-black rounded-2xl p-4 border border-white/10">
-            ✅ Featured on our page
+            ✅ Post catches to the Murky Waters page
+          </div>
+
+          <div className="bg-black rounded-2xl p-4 border border-white/10">
+            ✅ Have Murky Waters in your bio
           </div>
         </div>
 
+        <p className="text-gray-400 text-sm mt-4">
+          Discount codes are sent privately to approved team members.
+        </p>
+
         <a
-          href={`https://wa.me/447519223822?text=${encodeURIComponent(
-            "Hi, I’m interested in joining the Murky Waters team."
-          )}`}
+          href={teamLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="block w-full max-w-md mx-auto bg-pink-500 text-white font-black py-4 rounded-2xl mt-5"
+          className="block w-full max-w-md mx-auto bg-pink-500 text-white font-black py-4 rounded-2xl mt-5 text-center"
         >
-          Apply To Join The Team
+          Apply For Team Discount
         </a>
       </section>
 
-      {/* PRODUCTS */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-4">
         <h2 className="text-3xl font-black text-center mb-5">
           Build Your Order
@@ -159,41 +152,104 @@ ${customerText}`;
 
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
-            <div key={product} className="rounded-2xl p-4 text-center border">
+            <div
+              key={product}
+              className={`rounded-2xl p-4 text-center border ${
+                quantities[product] > 0
+                  ? "border-pink-500 shadow-lg shadow-pink-500/20"
+                  : "border-gray-700"
+              }`}
+            >
               <div className="mb-3 font-bold">{product}</div>
 
-              <div className="flex justify-center gap-3">
-                <button onClick={() => updateQty(product, -1)}>-</button>
-                <span>{quantities[product]}</span>
-                <button onClick={() => updateQty(product, 1)}>+</button>
+              <div className="flex justify-center items-center gap-4">
+                <button
+                  onClick={() => updateQty(product, -1)}
+                  className="bg-gray-700 px-4 py-2 rounded-xl font-bold"
+                >
+                  -
+                </button>
+
+                <span className="text-xl font-black">
+                  {quantities[product]}
+                </span>
+
+                <button
+                  onClick={() => updateQty(product, 1)}
+                  className="bg-pink-500 px-4 py-2 rounded-xl font-bold"
+                >
+                  +
+                </button>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* FORM */}
-      <section className="mt-6 bg-zinc-950 p-5 rounded-3xl">
-        <input placeholder="Name" onChange={(e)=>updateCustomer("name",e.target.value)} className="w-full p-3 mb-2"/>
-        <textarea placeholder="Address" onChange={(e)=>updateCustomer("address",e.target.value)} className="w-full p-3 mb-2"/>
-        <input placeholder="Postcode" onChange={(e)=>updateCustomer("postcode",e.target.value)} className="w-full p-3 mb-2"/>
-        <input placeholder="Email" onChange={(e)=>updateCustomer("email",e.target.value)} className="w-full p-3 mb-2"/>
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
+        <h2 className="text-3xl font-black text-center mb-4">
+          Delivery Details
+        </h2>
+
+        <input
+          placeholder="Full name"
+          value={customer.name}
+          onChange={(e) => updateCustomer("name", e.target.value)}
+          className="w-full p-4 mb-3 rounded-2xl bg-black border border-gray-600 text-white"
+        />
+
+        <textarea
+          placeholder="Full delivery address"
+          value={customer.address}
+          onChange={(e) => updateCustomer("address", e.target.value)}
+          className="w-full p-4 mb-3 rounded-2xl bg-black border border-gray-600 text-white"
+        />
+
+        <input
+          placeholder="Postcode"
+          value={customer.postcode}
+          onChange={(e) => updateCustomer("postcode", e.target.value)}
+          className="w-full p-4 mb-3 rounded-2xl bg-black border border-gray-600 text-white"
+        />
+
+        <input
+          placeholder="Email"
+          value={customer.email}
+          onChange={(e) => updateCustomer("email", e.target.value)}
+          className="w-full p-4 mb-3 rounded-2xl bg-black border border-gray-600 text-white"
+        />
+
+        <textarea
+          placeholder="Notes / team discount code if approved"
+          value={customer.notes}
+          onChange={(e) => updateCustomer("notes", e.target.value)}
+          className="w-full p-4 rounded-2xl bg-black border border-gray-600 text-white"
+        />
       </section>
 
-      {/* TOTAL */}
-      <section className="mt-6 text-center">
-        <div className="text-4xl font-black">£{total.toFixed(2)}</div>
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
+        <p className="text-gray-400 text-sm">Your Order Total</p>
+
+        <div className="text-5xl font-black text-green-400 mt-2">
+          £{total.toFixed(2)}
+        </div>
+
+        {totalItems > 0 && (
+          <p className="text-gray-400 text-sm mt-2">
+            Delivery included
+          </p>
+        )}
       </section>
 
-      {/* BUTTONS */}
       {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-black">
-          <button onClick={handleStripeCheckout} className="w-full bg-white text-black py-4 mb-2">
-            Pay Securely
-          </button>
-
-          <a href={whatsappLink} target="_blank" className="w-full block bg-green-500 text-white py-4 text-center">
-            Send Order
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-black/95 border-t border-white/10">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full max-w-md mx-auto bg-green-500 text-white font-black py-5 rounded-2xl text-xl text-center"
+          >
+            💬 Send Order on WhatsApp
           </a>
         </div>
       )}
