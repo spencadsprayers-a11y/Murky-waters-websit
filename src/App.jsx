@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 export default function App() {
+  const [discountCode, setDiscountCode] = useState("");
+
   const [customer, setCustomer] = useState({
     name: "",
     address: "",
@@ -46,8 +48,13 @@ export default function App() {
   const bundles = Math.floor(totalItems / 3);
   const singles = totalItems % 3;
 
-  const total =
-    totalItems === 0 ? 0 : bundles * 23.5 + (singles > 0 ? 11.5 : 0);
+  const productTotal = bundles * 20 + singles * 8;
+  const discountActive = discountCode.trim().toUpperCase() === "MURKY20";
+  const discountAmount = discountActive ? productTotal * 0.2 : 0;
+  const discountedProductTotal = productTotal - discountAmount;
+
+  const postage = totalItems > 0 ? 3.5 : 0;
+  const finalTotal = discountedProductTotal + postage;
 
   const selectedText = Object.entries(quantities)
     .filter(([_, qty]) => qty > 0)
@@ -58,6 +65,7 @@ export default function App() {
 Address: ${customer.address}
 Postcode: ${customer.postcode}
 Email: ${customer.email}
+Discount Code: ${discountCode || "None"}
 Notes: ${customer.notes || "None"}`;
 
   const whatsappMessage = `🔥 Murky Waters Order 🔥
@@ -65,7 +73,10 @@ Notes: ${customer.notes || "None"}`;
 ${selectedText}
 
 Items: ${totalItems}
-Total: £${total.toFixed(2)}
+Product Total: £${productTotal.toFixed(2)}
+Discount: £${discountAmount.toFixed(2)}
+Postage: £${postage.toFixed(2)}
+Final Total: £${finalTotal.toFixed(2)}
 
 Customer Details:
 ${customerText}`;
@@ -87,53 +98,37 @@ ${customerText}`;
 
         <h1 className="text-5xl font-black mt-2">Fishing Glooze</h1>
 
-        <p className="text-gray-300 mt-3">
-          Sticky. Strong. Irresistible.
-        </p>
+        <p className="text-gray-300 mt-3">Sticky. Strong. Irresistible.</p>
 
         <div className="inline-block bg-yellow-400 text-black px-6 py-3 rounded-2xl font-black text-2xl mt-5 shadow-lg">
           🔥 3 FOR £20 🔥
         </div>
 
-        <p className="text-gray-400 mt-2">
-          + £3.50 delivery = £23.50 delivered
-        </p>
-
-        <p className="text-gray-400">
-          £8 each + delivery = £11.50 delivered
-        </p>
+        <p className="text-gray-400 mt-2">or £8 each</p>
+        <p className="text-gray-400">+ £3.50 UK postage</p>
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
-        <h2 className="text-3xl font-black mb-3">
-          Team Discount
-        </h2>
+        <h2 className="text-3xl font-black mb-3">Team Discount</h2>
 
         <p className="text-gray-300 mb-4">
-          Approved Murky Waters team members receive 20% off orders.
+          Approved Murky Waters team members receive 20% off product orders.
         </p>
 
         <div className="grid gap-3 text-left text-sm">
           <div className="bg-black rounded-2xl p-4 border border-white/10">
             ✅ 20% off team member orders
           </div>
-
           <div className="bg-black rounded-2xl p-4 border border-white/10">
             ✅ Team socials throughout the year
           </div>
-
           <div className="bg-black rounded-2xl p-4 border border-white/10">
             ✅ Post catches to the Murky Waters page
           </div>
-
           <div className="bg-black rounded-2xl p-4 border border-white/10">
             ✅ Have Murky Waters in your bio
           </div>
         </div>
-
-        <p className="text-gray-400 text-sm mt-4">
-          Discount codes are sent privately to approved team members.
-        </p>
 
         <a
           href={teamLink}
@@ -188,6 +183,25 @@ ${customerText}`;
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
         <h2 className="text-3xl font-black text-center mb-4">
+          Discount Code
+        </h2>
+
+        <input
+          placeholder="Enter discount code"
+          value={discountCode}
+          onChange={(e) => setDiscountCode(e.target.value)}
+          className="w-full p-4 rounded-2xl bg-black border border-gray-600 text-white text-center uppercase"
+        />
+
+        {discountActive && (
+          <p className="text-green-400 font-bold text-center mt-3">
+            ✅ MURKY20 applied — 20% off products
+          </p>
+        )}
+      </section>
+
+      <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
+        <h2 className="text-3xl font-black text-center mb-4">
           Delivery Details
         </h2>
 
@@ -220,7 +234,7 @@ ${customerText}`;
         />
 
         <textarea
-          placeholder="Notes / team discount code if approved"
+          placeholder="Notes / special requests"
           value={customer.notes}
           onChange={(e) => updateCustomer("notes", e.target.value)}
           className="w-full p-4 rounded-2xl bg-black border border-gray-600 text-white"
@@ -228,17 +242,30 @@ ${customerText}`;
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
-        <p className="text-gray-400 text-sm">Your Order Total</p>
+        <p className="text-gray-400 text-sm">Order Summary</p>
 
-        <div className="text-5xl font-black text-green-400 mt-2">
-          £{total.toFixed(2)}
+        <div className="mt-4 text-left text-gray-300 space-y-2">
+          <div className="flex justify-between">
+            <span>Products</span>
+            <span>£{productTotal.toFixed(2)}</span>
+          </div>
+
+          {discountActive && (
+            <div className="flex justify-between text-green-400">
+              <span>Team discount</span>
+              <span>-£{discountAmount.toFixed(2)}</span>
+            </div>
+          )}
+
+          <div className="flex justify-between">
+            <span>Postage</span>
+            <span>£{postage.toFixed(2)}</span>
+          </div>
         </div>
 
-        {totalItems > 0 && (
-          <p className="text-gray-400 text-sm mt-2">
-            Delivery included
-          </p>
-        )}
+        <div className="text-5xl font-black text-green-400 mt-5">
+          £{finalTotal.toFixed(2)}
+        </div>
       </section>
 
       {totalItems > 0 && (
