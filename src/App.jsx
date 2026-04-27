@@ -49,7 +49,7 @@ export default function App() {
   const singles = totalItems % 3;
 
   const productTotal = bundles * 20 + singles * 8;
-  const discountActive = discountCode.trim().toUpperCase() === "MURKY20";
+  const discountActive = discountCode.trim().toUpperCase() === "MURKYWATERS20";
   const discountAmount = discountActive ? productTotal * 0.2 : 0;
   const discountedProductTotal = productTotal - discountAmount;
 
@@ -86,7 +86,7 @@ ${customerText}`;
   )}`;
 
   const teamLink = `https://wa.me/447519223822?text=${encodeURIComponent(
-    "Hi, I’m interested in joining the Murky Waters team and applying for the team discount."
+    "Hi, I’m interested in joining the Murky Waters team."
   )}`;
 
   return (
@@ -109,7 +109,7 @@ ${customerText}`;
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center shadow-2xl">
-        <h2 className="text-3xl font-black mb-3">Team Discount</h2>
+        <h2 className="text-3xl font-black mb-3">Join The Murky Waters Team</h2>
 
         <p className="text-gray-300 mb-4">
           Approved Murky Waters team members receive 20% off product orders.
@@ -136,14 +136,12 @@ ${customerText}`;
           rel="noopener noreferrer"
           className="block w-full max-w-md mx-auto bg-pink-500 text-white font-black py-4 rounded-2xl mt-5 text-center"
         >
-          Apply For Team Discount
+          Apply To Be A Team Member
         </a>
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-4">
-        <h2 className="text-3xl font-black text-center mb-5">
-          Build Your Order
-        </h2>
+        <h2 className="text-3xl font-black text-center mb-5">Build Your Order</h2>
 
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
@@ -182,9 +180,7 @@ ${customerText}`;
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
-        <h2 className="text-3xl font-black text-center mb-4">
-          Discount Code
-        </h2>
+        <h2 className="text-3xl font-black text-center mb-4">Discount Code</h2>
 
         <input
           placeholder="Enter discount code"
@@ -195,15 +191,13 @@ ${customerText}`;
 
         {discountActive && (
           <p className="text-green-400 font-bold text-center mt-3">
-            ✅ MURKY20 applied — 20% off products
+            ✅ MURKYWATERS20 applied — 20% off products
           </p>
         )}
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
-        <h2 className="text-3xl font-black text-center mb-4">
-          Delivery Details
-        </h2>
+        <h2 className="text-3xl font-black text-center mb-4">Delivery Details</h2>
 
         <input
           placeholder="Full name"
