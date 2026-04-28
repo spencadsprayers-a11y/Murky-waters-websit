@@ -30,17 +30,20 @@ export default function App() {
     "Peach & Black Pepper": 0,
   });
 
-  const [pelletQty, setPelletQty] = useState(0);
-
-  const badges = {
-    "Pineapple Dream": "Best Seller",
-    "Sweet Mango": "Fruity Favourite",
-    "Squid & Octopus": "Savoury Hit",
-    "Peach & Black Pepper": "New Flavour",
-  };
+  const [pellets, setPellets] = useState({
+    "2kg Micro Mini Mix Pellet": 0,
+    "2kg Bucket 6mm Halibut Pellets": 0,
+  });
 
   const updateQty = (item, change) => {
     setQuantities((prev) => ({
+      ...prev,
+      [item]: Math.max(0, prev[item] + change),
+    }));
+  };
+
+  const updatePelletQty = (item, change) => {
+    setPellets((prev) => ({
       ...prev,
       [item]: Math.max(0, prev[item] + change),
     }));
@@ -54,34 +57,38 @@ export default function App() {
   };
 
   const liquidItems = Object.values(quantities).reduce((a, b) => a + b, 0);
-  const totalItems = liquidItems + pelletQty;
+  const pelletItems = Object.values(pellets).reduce((a, b) => a + b, 0);
+  const totalItems = liquidItems + pelletItems;
 
   const bundles = Math.floor(liquidItems / 3);
   const singles = liquidItems % 3;
 
   const liquidTotal = bundles * 20 + singles * 8;
-  const pelletTotal = pelletQty * 8.5;
+  const pelletTotal = pelletItems * 8.5;
   const productTotal = liquidTotal + pelletTotal;
 
   const discountActive =
     discountCode.trim().toUpperCase() === "MURKYWATERS20";
 
   const discountAmount = discountActive ? productTotal * 0.2 : 0;
-  const postage = totalItems > 0 ? (pelletQty > 0 ? 3.95 : 3.5) : 0;
+
+  const postage = totalItems > 0 ? (pelletItems > 0 ? 3.95 : 3.5) : 0;
+
   const finalTotal = productTotal - discountAmount + postage;
 
   const selectedText = [
     ...Object.entries(quantities)
       .filter(([_, qty]) => qty > 0)
       .map(([name, qty]) => `${name} x${qty}`),
-    ...(pelletQty > 0 ? [`2kg Micro Mini Mix Pellet x${pelletQty}`] : []),
+    ...Object.entries(pellets)
+      .filter(([_, qty]) => qty > 0)
+      .map(([name, qty]) => `${name} x${qty}`),
   ].join("\n");
 
   const whatsappMessage = `🔥 Murky Waters Order 🔥
 
 ${selectedText}
 
-Items: ${totalItems}
 Products: £${productTotal.toFixed(2)}
 Discount: £${discountAmount.toFixed(2)}
 Postage: £${postage.toFixed(2)}
@@ -104,7 +111,6 @@ Notes: ${customer.notes || "None"}`;
 
   return (
     <div className="min-h-screen bg-black text-white px-4 pb-40">
-      {/* HERO */}
       <section className="text-center py-12 rounded-b-[2rem] bg-gradient-to-b from-yellow-900/30 via-black to-black border-b border-yellow-500/30">
         <p className="text-yellow-400 tracking-[0.35em] text-xs font-black">
           MURKY WATERS
@@ -130,6 +136,10 @@ Notes: ${customer.notes || "None"}`;
           £8 each • + £3.50 UK postage
         </p>
 
+        <p className="text-gray-400 text-sm mt-1">
+          Pellet orders postage: £3.95
+        </p>
+
         <a
           href={FACEBOOK_PAGE}
           target="_blank"
@@ -140,7 +150,6 @@ Notes: ${customer.notes || "None"}`;
         </a>
       </section>
 
-      {/* WHY */}
       <section className="mt-6 bg-zinc-950 border border-yellow-500/20 rounded-3xl p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black mb-3">Why Choose Murky Waters?</h2>
 
@@ -166,7 +175,6 @@ Notes: ${customer.notes || "None"}`;
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
         <h2 className="text-3xl font-black mb-3">Proven On The Bank</h2>
 
@@ -174,26 +182,8 @@ Notes: ${customer.notes || "None"}`;
           Already helping anglers get results — including helping land a
           Cheshire 40lber.
         </p>
-
-        <div className="grid grid-cols-3 gap-3 mt-5 text-sm">
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            <p className="text-yellow-400 font-black">⭐️⭐️⭐️⭐️⭐️</p>
-            <p className="mt-2 text-gray-300">Top Feedback</p>
-          </div>
-
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            <p className="text-green-400 text-xl font-black">PVA</p>
-            <p className="mt-2 text-gray-300">Friendly</p>
-          </div>
-
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            <p className="text-pink-400 text-xl font-black">UK</p>
-            <p className="mt-2 text-gray-300">Angler Made</p>
-          </div>
-        </div>
       </section>
 
-      {/* IMAGE */}
       <section className="py-6">
         <img
           src="/images/Product-range.png"
@@ -202,7 +192,6 @@ Notes: ${customer.notes || "None"}`;
         />
       </section>
 
-      {/* TEAM */}
       <section className="bg-zinc-950 border border-pink-500/30 rounded-3xl p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black mb-3">Join The Murky Waters Team</h2>
 
@@ -241,7 +230,6 @@ Notes: ${customer.notes || "None"}`;
         </a>
       </section>
 
-      {/* ORDER */}
       <section className="mt-6 bg-zinc-950 border border-yellow-500/20 rounded-3xl p-4">
         <h2 className="text-3xl font-black text-center mb-2">
           Build Your Order
@@ -261,12 +249,6 @@ Notes: ${customer.notes || "None"}`;
                   : "border-gray-700"
               }`}
             >
-              {badges[product] && (
-                <div className="inline-block bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full mb-2">
-                  {badges[product]}
-                </div>
-              )}
-
               <div className="mb-4 font-black">{product}</div>
 
               <div className="flex justify-center items-center gap-4">
@@ -277,9 +259,7 @@ Notes: ${customer.notes || "None"}`;
                   -
                 </button>
 
-                <span className="text-xl font-black">
-                  {quantities[product]}
-                </span>
+                <span className="text-xl font-black">{quantities[product]}</span>
 
                 <button
                   onClick={() => updateQty(product, 1)}
@@ -292,37 +272,44 @@ Notes: ${customer.notes || "None"}`;
           ))}
         </div>
 
-        {/* PELLET */}
-        <div className="mt-5 border border-yellow-500/40 rounded-3xl p-5 bg-black">
-          <p className="text-yellow-400 text-sm font-black">NEW PRODUCT</p>
-
-          <h3 className="text-2xl font-black mt-1">
-            2kg Micro Mini Mix Pellet
-          </h3>
-
-          <p className="text-gray-400 mt-1">£8.50 per bucket</p>
-
-          <div className="flex justify-center items-center gap-4 mt-4">
-            <button
-              onClick={() => setPelletQty(Math.max(0, pelletQty - 1))}
-              className="bg-gray-700 px-4 py-2 rounded-xl font-black"
+        <div className="mt-6 space-y-4">
+          {Object.keys(pellets).map((product) => (
+            <div
+              key={product}
+              className={`border rounded-3xl p-5 bg-black ${
+                pellets[product] > 0
+                  ? "border-yellow-400 shadow-lg shadow-yellow-500/20"
+                  : "border-yellow-500/40"
+              }`}
             >
-              -
-            </button>
+              <p className="text-yellow-400 text-sm font-black">PELLET BUCKET</p>
 
-            <span className="text-xl font-black">{pelletQty}</span>
+              <h3 className="text-2xl font-black mt-1">{product}</h3>
 
-            <button
-              onClick={() => setPelletQty(pelletQty + 1)}
-              className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black"
-            >
-              +
-            </button>
-          </div>
+              <p className="text-gray-400 mt-1">£8.50 per 2kg bucket</p>
+
+              <div className="flex justify-center items-center gap-4 mt-4">
+                <button
+                  onClick={() => updatePelletQty(product, -1)}
+                  className="bg-gray-700 px-4 py-2 rounded-xl font-black"
+                >
+                  -
+                </button>
+
+                <span className="text-xl font-black">{pellets[product]}</span>
+
+                <button
+                  onClick={() => updatePelletQty(product, 1)}
+                  className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* DISCOUNT */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
         <h2 className="text-3xl font-black text-center mb-4">Discount Code</h2>
 
@@ -335,12 +322,15 @@ Notes: ${customer.notes || "None"}`;
 
         {discountActive && (
           <p className="text-green-400 font-bold text-center mt-3">
-            ✅ MURKYWATERS20 applied — 20% off
+            ✅ MURKYWATERS20 applied — 20% off products only
           </p>
         )}
+
+        <p className="text-gray-500 text-center text-xs mt-2">
+          Discount does not apply to delivery.
+        </p>
       </section>
 
-      {/* DETAILS */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5">
         <h2 className="text-3xl font-black text-center mb-4">
           Delivery Details
@@ -382,7 +372,6 @@ Notes: ${customer.notes || "None"}`;
         />
       </section>
 
-      {/* SUMMARY */}
       <section className="mt-6 bg-zinc-950 border border-yellow-500/30 rounded-3xl p-5 text-center">
         <p className="text-gray-400 text-sm">Order Summary</p>
 
@@ -400,7 +389,7 @@ Notes: ${customer.notes || "None"}`;
           )}
 
           <div className="flex justify-between">
-            <span>Postage</span>
+            <span>Delivery</span>
             <span>£{postage.toFixed(2)}</span>
           </div>
         </div>
@@ -410,7 +399,6 @@ Notes: ${customer.notes || "None"}`;
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 mb-6">
         <h2 className="text-3xl font-black text-center mb-4">FAQ</h2>
 
@@ -426,19 +414,16 @@ Notes: ${customer.notes || "None"}`;
           </div>
 
           <div className="bg-black rounded-2xl p-4 border border-white/10">
-            <strong>How much is postage?</strong>
+            <strong>How much is delivery?</strong>
             <p>
-              Standard UK postage is £3.50. If pellets are selected, postage is
-              £3.95.
+              Standard liquid orders are £3.50. If pellets are selected,
+              delivery is £3.95.
             </p>
           </div>
 
           <div className="bg-black rounded-2xl p-4 border border-white/10">
-            <strong>How do I use it?</strong>
-            <p>
-              Add directly to boilies, pellets, hookbaits, spod mix or
-              groundbait.
-            </p>
+            <strong>Do discounts apply to delivery?</strong>
+            <p>No — team discounts apply to products only, not delivery.</p>
           </div>
         </div>
 
@@ -452,7 +437,6 @@ Notes: ${customer.notes || "None"}`;
         </a>
       </section>
 
-      {/* STICKY BUTTON */}
       {totalItems > 0 && (
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-black/95 border-t border-yellow-500/20">
           <a
