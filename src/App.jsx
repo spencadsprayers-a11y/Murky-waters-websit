@@ -14,14 +14,20 @@ export default function App() {
   });
 
   const [glooze, setGlooze] = useState({
-    "Sweet Mango": 0,
-    "Peach & Black Pepper": 0,
     "Pineapple Dream": 0,
-    "Strawberry Cream": 0,
-    "Mulberry Zing": 0,
+    "Tigernut Extract": 0,
     "Squid & Octopus": 0,
     "Bloodworm Extract": 0,
     "Pure Calanus Extract": 0,
+    "Tutti Sweet Amino": 0,
+    "Plum Sauce": 0,
+    "Robin / Garlic": 0,
+    "Maple Cream": 0,
+    "Maple / Mulberry": 0,
+    "Mulberry Zing": 0,
+    "Strawberry Cream": 0,
+    "Sweet Mango": 0,
+    "Peach & Black Pepper": 0,
   });
 
   const [pellets, setPellets] = useState({
@@ -35,8 +41,8 @@ export default function App() {
   };
 
   const badges = {
-    "Sweet Mango": "New",
     "Pineapple Dream": "Best Seller",
+    "Sweet Mango": "New",
     "Peach & Black Pepper": "Team Pick",
     "Squid & Octopus": "Savoury Hit",
     "3kg Micro Mini Mix Pellet": "PVA Bag Hero",
@@ -45,7 +51,10 @@ export default function App() {
 
   const updateQty = (item, change, type) => {
     const updater = type === "glooze" ? setGlooze : setPellets;
-    updater((prev) => ({ ...prev, [item]: Math.max(0, prev[item] + change) }));
+    updater((prev) => ({
+      ...prev,
+      [item]: Math.max(0, prev[item] + change),
+    }));
   };
 
   const updateCustomer = (field, value) => {
@@ -118,17 +127,15 @@ Notes: ${customer.notes || "None"}`;
         </div>
       )}
 
-      <div className="mb-3 mt-5 h-20 rounded-2xl bg-gradient-to-br from-yellow-400/30 via-black to-pink-500/20 border border-white/10 flex items-center justify-center">
+      <div className="mb-3 mt-5 flex h-20 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-yellow-400/30 via-black to-pink-500/20">
         <span className="text-3xl">🎣</span>
       </div>
 
       <h3 className="text-lg font-black leading-tight">{name}</h3>
 
-      {price && <p className="mt-1 text-yellow-400 font-bold">£{price}</p>}
+      {price && <p className="mt-1 font-bold text-yellow-400">£{price}</p>}
 
-      {description && (
-        <p className="mt-2 text-xs text-gray-400">{description}</p>
-      )}
+      {description && <p className="mt-2 text-xs text-gray-400">{description}</p>}
 
       <div className="mt-4 flex items-center justify-center gap-4">
         <button
@@ -151,9 +158,9 @@ Notes: ${customer.notes || "None"}`;
   );
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 pb-40">
+    <div className="min-h-screen bg-black px-4 pb-40 text-white">
       <section className="relative overflow-hidden rounded-b-[2rem] border-b border-yellow-500/30 bg-gradient-to-b from-yellow-900/40 via-black to-black py-12 text-center">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_#facc15,_transparent_35%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#facc15,_transparent_35%)] opacity-20" />
 
         <div className="relative">
           <p className="text-xs font-black tracking-[0.4em] text-yellow-400">
@@ -203,6 +210,7 @@ Notes: ${customer.notes || "None"}`;
 
       <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black">Why Choose Murky Waters?</h2>
+
         <p className="mt-3 text-gray-300">
           After 2 years of proper on-the-bank testing, every bottle is made with
           high-quality ingredients and proven food sources. No gimmicks — just
@@ -230,6 +238,7 @@ Notes: ${customer.notes || "None"}`;
 
       <section className="rounded-3xl border border-pink-500/30 bg-zinc-950 p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black">Join The Team</h2>
+
         <p className="mt-3 text-gray-300">
           Approved team members get 20% off products, access to socials, monthly
           competitions and featured catches.
@@ -247,6 +256,7 @@ Notes: ${customer.notes || "None"}`;
 
       <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
         <h2 className="text-center text-3xl font-black">Build Your Order</h2>
+
         <p className="mb-5 mt-2 text-center text-gray-400">
           Mix & match any flavours or choose 3 of the same.
         </p>
