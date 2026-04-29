@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 const FACEBOOK_PAGE = "https://www.facebook.com/share/18jdHNeNu4/";
+const WHATSAPP_NUMBER = "447519223822";
 
 export default function App() {
   const [discountCode, setDiscountCode] = useState("");
@@ -13,7 +14,7 @@ export default function App() {
     notes: "",
   });
 
-  const [quantities, setQuantities] = useState({
+  const [glooze, setGlooze] = useState({
     "Pineapple Dream": 0,
     "Tigernut Extract": 0,
     "Squid & Octopus": 0,
@@ -31,18 +32,25 @@ export default function App() {
   });
 
   const [pellets, setPellets] = useState({
-    "2kg Micro Mini Mix Pellet": 0,
+    "3kg Micro Mini Mix Pellet": 0,
     "2kg Bucket 6mm Halibut Pellets": 0,
+    "3kg Bucket 6mm Halibut Pellets": 0,
   });
 
-  const updateQty = (item, change) => {
-    setQuantities((prev) => ({
+  const pelletPrices = {
+    "3kg Micro Mini Mix Pellet": 13.5,
+    "2kg Bucket 6mm Halibut Pellets": 8.5,
+    "3kg Bucket 6mm Halibut Pellets": 11.5,
+  };
+
+  const updateGlooze = (item, change) => {
+    setGlooze((prev) => ({
       ...prev,
       [item]: Math.max(0, prev[item] + change),
     }));
   };
 
-  const updatePelletQty = (item, change) => {
+  const updatePellet = (item, change) => {
     setPellets((prev) => ({
       ...prev,
       [item]: Math.max(0, prev[item] + change),
@@ -56,32 +64,32 @@ export default function App() {
     }));
   };
 
-  const liquidItems = Object.values(quantities).reduce((a, b) => a + b, 0);
+  const gloozeItems = Object.values(glooze).reduce((a, b) => a + b, 0);
   const pelletItems = Object.values(pellets).reduce((a, b) => a + b, 0);
-  const totalItems = liquidItems + pelletItems;
+  const totalItems = gloozeItems + pelletItems;
 
-  const bundles = Math.floor(liquidItems / 3);
-  const singles = liquidItems % 3;
+  const bundles = Math.floor(gloozeItems / 3);
+  const singles = gloozeItems % 3;
 
-  const liquidTotal = bundles * 20 + singles * 8;
-  const pelletTotal = pelletItems * 8.5;
-  const productTotal = liquidTotal + pelletTotal;
+  const gloozeTotal = bundles * 20 + singles * 8;
 
-  const discountActive =
-    discountCode.trim().toUpperCase() === "MURKYWATERS20";
+  const pelletTotal = Object.entries(pellets).reduce(
+    (sum, [name, qty]) => sum + qty * pelletPrices[name],
+    0
+  );
 
+  const productTotal = gloozeTotal + pelletTotal;
+  const discountActive = discountCode.trim().toUpperCase() === "MURKYWATERS20";
   const discountAmount = discountActive ? productTotal * 0.2 : 0;
-
-  const postage = totalItems > 0 ? (pelletItems > 0 ? 3.95 : 3.5) : 0;
-
-  const finalTotal = productTotal - discountAmount + postage;
+  const delivery = totalItems > 0 ? (pelletItems > 0 ? 3.95 : 3.5) : 0;
+  const finalTotal = productTotal - discountAmount + delivery;
 
   const selectedText = [
-    ...Object.entries(quantities)
-      .filter(([_, qty]) => qty > 0)
+    ...Object.entries(glooze)
+      .filter(([, qty]) => qty > 0)
       .map(([name, qty]) => `${name} x${qty}`),
     ...Object.entries(pellets)
-      .filter(([_, qty]) => qty > 0)
+      .filter(([, qty]) => qty > 0)
       .map(([name, qty]) => `${name} x${qty}`),
   ].join("\n");
 
@@ -91,7 +99,7 @@ ${selectedText}
 
 Products: £${productTotal.toFixed(2)}
 Discount: £${discountAmount.toFixed(2)}
-Postage: £${postage.toFixed(2)}
+Delivery: £${delivery.toFixed(2)}
 TOTAL: £${finalTotal.toFixed(2)}
 
 Customer Details:
@@ -101,17 +109,17 @@ Postcode: ${customer.postcode}
 Email: ${customer.email}
 Notes: ${customer.notes || "None"}`;
 
-  const whatsappLink = `https://wa.me/447519223822?text=${encodeURIComponent(
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     whatsappMessage
   )}`;
 
-  const teamLink = `https://wa.me/447519223822?text=${encodeURIComponent(
+  const teamLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     "Hi, I’m interested in joining the Murky Waters team."
   )}`;
 
   return (
     <div className="min-h-screen bg-black text-white px-4 pb-40">
-      <section className="text-center py-12 rounded-b-[2rem] bg-gradient-to-b from-yellow-900/30 via-black to-black border-b border-yellow-500/30">
+      <section className="text-center py-12 rounded-b-[2rem] bg-gradient-to-b from-yellow-900/40 via-black to-black border-b border-yellow-500/30">
         <p className="text-yellow-400 tracking-[0.35em] text-xs font-black">
           MURKY WATERS
         </p>
@@ -133,11 +141,11 @@ Notes: ${customer.notes || "None"}`;
         </div>
 
         <p className="mt-3 text-gray-300">
-          £8 each • + £3.50 UK postage
+          £8 each • Liquids delivery £3.50
         </p>
 
         <p className="text-gray-400 text-sm mt-1">
-          Pellet orders postage: £3.95
+          Pellet orders delivery £3.95
         </p>
 
         <a
@@ -152,7 +160,6 @@ Notes: ${customer.notes || "None"}`;
 
       <section className="mt-6 bg-zinc-950 border border-yellow-500/20 rounded-3xl p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black mb-3">Why Choose Murky Waters?</h2>
-
         <p className="text-gray-300">
           After 2 years of proper on-the-bank testing, every bottle is made with
           high-quality ingredients and proven food sources. No gimmicks — just
@@ -160,24 +167,21 @@ Notes: ${customer.notes || "None"}`;
         </p>
 
         <div className="grid grid-cols-2 gap-3 mt-5 text-sm">
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            ✅ PVA Friendly
-          </div>
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            ✅ Easy To Use
-          </div>
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            ✅ Boosts Any Bait
-          </div>
-          <div className="bg-black rounded-2xl p-4 border border-white/10">
-            ✅ All Year Round
-          </div>
+          {["PVA Friendly", "Easy To Use", "Boosts Any Bait", "All Year Round"].map(
+            (item) => (
+              <div
+                key={item}
+                className="bg-black rounded-2xl p-4 border border-white/10"
+              >
+                ✅ {item}
+              </div>
+            )
+          )}
         </div>
       </section>
 
       <section className="mt-6 bg-zinc-950 border border-white/10 rounded-3xl p-5 text-center">
         <h2 className="text-3xl font-black mb-3">Proven On The Bank</h2>
-
         <p className="text-gray-300">
           Already helping anglers get results — including helping land a
           Cheshire 40lber.
@@ -194,7 +198,6 @@ Notes: ${customer.notes || "None"}`;
 
       <section className="bg-zinc-950 border border-pink-500/30 rounded-3xl p-5 text-center shadow-2xl">
         <h2 className="text-3xl font-black mb-3">Join The Murky Waters Team</h2>
-
         <p className="text-gray-300 mb-4">
           We’re building a trusted team of anglers to represent Murky Waters on
           the bank.
@@ -240,11 +243,11 @@ Notes: ${customer.notes || "None"}`;
         </p>
 
         <div className="grid grid-cols-2 gap-4">
-          {Object.keys(quantities).map((product) => (
+          {Object.keys(glooze).map((product) => (
             <div
               key={product}
               className={`rounded-2xl p-4 text-center border ${
-                quantities[product] > 0
+                glooze[product] > 0
                   ? "border-pink-500 shadow-lg shadow-pink-500/20"
                   : "border-gray-700"
               }`}
@@ -253,16 +256,16 @@ Notes: ${customer.notes || "None"}`;
 
               <div className="flex justify-center items-center gap-4">
                 <button
-                  onClick={() => updateQty(product, -1)}
+                  onClick={() => updateGlooze(product, -1)}
                   className="bg-gray-700 px-4 py-2 rounded-xl font-black"
                 >
                   -
                 </button>
 
-                <span className="text-xl font-black">{quantities[product]}</span>
+                <span className="text-xl font-black">{glooze[product]}</span>
 
                 <button
-                  onClick={() => updateQty(product, 1)}
+                  onClick={() => updateGlooze(product, 1)}
                   className="bg-pink-500 px-4 py-2 rounded-xl font-black"
                 >
                   +
@@ -272,7 +275,11 @@ Notes: ${customer.notes || "None"}`;
           ))}
         </div>
 
-        <div className="mt-6 space-y-4">
+        <h3 className="text-2xl font-black text-center mt-8 mb-4 text-yellow-400">
+          Pellet Buckets
+        </h3>
+
+        <div className="space-y-4">
           {Object.keys(pellets).map((product) => (
             <div
               key={product}
@@ -282,15 +289,25 @@ Notes: ${customer.notes || "None"}`;
                   : "border-yellow-500/40"
               }`}
             >
-              <p className="text-yellow-400 text-sm font-black">PELLET BUCKET</p>
+              <p className="text-yellow-400 text-sm font-black">
+                PELLET BUCKET
+              </p>
 
               <h3 className="text-2xl font-black mt-1">{product}</h3>
 
-              <p className="text-gray-400 mt-1">£8.50 per 2kg bucket</p>
+              <p className="text-gray-300 mt-1">
+                £{pelletPrices[product].toFixed(2)}
+              </p>
+
+              <p className="text-gray-500 text-sm mt-2">
+                {product.includes("Micro")
+                  ? "Perfect for PVA bags, spod mixes and heavy baiting."
+                  : "Strong food signal pellet designed to get fish feeding."}
+              </p>
 
               <div className="flex justify-center items-center gap-4 mt-4">
                 <button
-                  onClick={() => updatePelletQty(product, -1)}
+                  onClick={() => updatePellet(product, -1)}
                   className="bg-gray-700 px-4 py-2 rounded-xl font-black"
                 >
                   -
@@ -299,7 +316,7 @@ Notes: ${customer.notes || "None"}`;
                 <span className="text-xl font-black">{pellets[product]}</span>
 
                 <button
-                  onClick={() => updatePelletQty(product, 1)}
+                  onClick={() => updatePellet(product, 1)}
                   className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black"
                 >
                   +
@@ -390,7 +407,7 @@ Notes: ${customer.notes || "None"}`;
 
           <div className="flex justify-between">
             <span>Delivery</span>
-            <span>£{postage.toFixed(2)}</span>
+            <span>£{delivery.toFixed(2)}</span>
           </div>
         </div>
 
