@@ -3,8 +3,46 @@ import { useState } from "react";
 const FACEBOOK_PAGE = "https://www.facebook.com/share/18jdHNeNu4/";
 const WHATSAPP_NUMBER = "447519223822";
 
+const gloozeFlavours = [
+  "Pineapple Dream",
+  "Tigernut Extract",
+  "Squid & Octopus",
+  "Bloodworm Extract",
+  "Pure Calanus Extract",
+  "Tutti Sweet Amino",
+  "Plum Sauce",
+  "Robin / Garlic",
+  "Maple Cream",
+  "Maple / Mulberry",
+  "Mulberry Zing",
+  "Strawberry Cream",
+  "Sweet Mango",
+  "Peach & Black Pepper",
+];
+
+const sprayFlavours = [
+  "Sweet Mango",
+  "Tigernut",
+  "Strawberry Cream",
+  "Bloodworm",
+  "Maple Cream",
+  "Pineapple Dream",
+  "Tutti Fruity",
+  "Plum",
+  "Mulberry Zing",
+  "Squid & Octopus",
+  "Dairy Cream",
+  "Peach",
+];
+
+const pelletPrices = {
+  "3kg Micro Mini Mix Pellet": 13.5,
+  "3kg 6mm Halibut Pellets": 11.5,
+};
+
 export default function App() {
   const [discountCode, setDiscountCode] = useState("");
+
   const [customer, setCustomer] = useState({
     name: "",
     address: "",
@@ -13,45 +51,21 @@ export default function App() {
     notes: "",
   });
 
-  const [glooze, setGlooze] = useState({
-    "Pineapple Dream": 0,
-    "Tigernut Extract": 0,
-    "Squid & Octopus": 0,
-    "Bloodworm Extract": 0,
-    "Pure Calanus Extract": 0,
-    "Tutti Sweet Amino": 0,
-    "Plum Sauce": 0,
-    "Robin / Garlic": 0,
-    "Maple Cream": 0,
-    "Maple / Mulberry": 0,
-    "Mulberry Zing": 0,
-    "Strawberry Cream": 0,
-    "Sweet Mango": 0,
-    "Peach & Black Pepper": 0,
-  });
+  const [glooze, setGlooze] = useState(
+    Object.fromEntries(gloozeFlavours.map((flavour) => [flavour, 0]))
+  );
+
+  const [sprays, setSprays] = useState(
+    Object.fromEntries(sprayFlavours.map((flavour) => [flavour, 0]))
+  );
 
   const [pellets, setPellets] = useState({
     "3kg Micro Mini Mix Pellet": 0,
     "3kg 6mm Halibut Pellets": 0,
   });
 
-  const pelletPrices = {
-    "3kg Micro Mini Mix Pellet": 13.5,
-    "3kg 6mm Halibut Pellets": 11.5,
-  };
-
-  const badges = {
-    "Pineapple Dream": "Best Seller",
-    "Sweet Mango": "New",
-    "Peach & Black Pepper": "Team Pick",
-    "Squid & Octopus": "Savoury Hit",
-    "3kg Micro Mini Mix Pellet": "PVA Bag Hero",
-    "3kg 6mm Halibut Pellets": "Food Signal",
-  };
-
-  const updateQty = (item, change, type) => {
-    const updater = type === "glooze" ? setGlooze : setPellets;
-    updater((prev) => ({
+  const updateQty = (setter, item, change) => {
+    setter((prev) => ({
       ...prev,
       [item]: Math.max(0, prev[item] + change),
     }));
@@ -62,28 +76,33 @@ export default function App() {
   };
 
   const gloozeItems = Object.values(glooze).reduce((a, b) => a + b, 0);
+  const sprayItems = Object.values(sprays).reduce((a, b) => a + b, 0);
   const pelletItems = Object.values(pellets).reduce((a, b) => a + b, 0);
-  const totalItems = gloozeItems + pelletItems;
+  const totalItems = gloozeItems + sprayItems + pelletItems;
 
-  const bundles = Math.floor(gloozeItems / 3);
-  const singles = gloozeItems % 3;
-  const gloozeTotal = bundles * 20 + singles * 8;
+  const gloozeTotal = Math.floor(gloozeItems / 3) * 20 + (gloozeItems % 3) * 8;
+  const sprayTotal = Math.floor(sprayItems / 3) * 8 + (sprayItems % 3) * 3.25;
 
   const pelletTotal = Object.entries(pellets).reduce(
     (sum, [name, qty]) => sum + qty * pelletPrices[name],
     0
   );
 
-  const productTotal = gloozeTotal + pelletTotal;
+  const productTotal = gloozeTotal + sprayTotal + pelletTotal;
+
   const discountActive = discountCode.trim().toUpperCase() === "MURKYWATERS20";
   const discountAmount = discountActive ? productTotal * 0.2 : 0;
+
   const delivery = totalItems > 0 ? (pelletItems > 0 ? 3.95 : 3.5) : 0;
   const finalTotal = productTotal - discountAmount + delivery;
 
   const selectedText = [
     ...Object.entries(glooze)
       .filter(([, qty]) => qty > 0)
-      .map(([name, qty]) => `${name} x${qty}`),
+      .map(([name, qty]) => `Fishing Glooze - ${name} x${qty}`),
+    ...Object.entries(sprays)
+      .filter(([, qty]) => qty > 0)
+      .map(([name, qty]) => `25ml Booster Spray - ${name} x${qty}`),
     ...Object.entries(pellets)
       .filter(([, qty]) => qty > 0)
       .map(([name, qty]) => `${name} x${qty}`),
@@ -113,17 +132,17 @@ Notes: ${customer.notes || "None"}`;
     "Hi, I’m interested in joining the Murky Waters team."
   )}`;
 
-  const ProductCard = ({ name, qty, price, type, description }) => (
+  const ProductCard = ({ name, qty, price, onMinus, onPlus, tag, desc }) => (
     <div
-      className={`relative overflow-hidden rounded-3xl border p-4 text-center transition ${
+      className={`relative rounded-3xl border p-4 text-center ${
         qty > 0
           ? "border-yellow-400 bg-yellow-400/10 shadow-lg shadow-yellow-500/20"
           : "border-white/10 bg-zinc-950"
       }`}
     >
-      {badges[name] && (
+      {tag && (
         <div className="absolute right-3 top-3 rounded-full bg-yellow-400 px-3 py-1 text-xs font-black text-black">
-          {badges[name]}
+          {tag}
         </div>
       )}
 
@@ -132,14 +151,13 @@ Notes: ${customer.notes || "None"}`;
       </div>
 
       <h3 className="text-lg font-black leading-tight">{name}</h3>
+      <p className="mt-1 font-bold text-yellow-400">{price}</p>
 
-      {price && <p className="mt-1 font-bold text-yellow-400">£{price}</p>}
-
-      {description && <p className="mt-2 text-xs text-gray-400">{description}</p>}
+      {desc && <p className="mt-2 text-xs text-gray-400">{desc}</p>}
 
       <div className="mt-4 flex items-center justify-center gap-4">
         <button
-          onClick={() => updateQty(name, -1, type)}
+          onClick={onMinus}
           className="h-10 w-10 rounded-xl bg-zinc-800 text-xl font-black"
         >
           -
@@ -148,7 +166,7 @@ Notes: ${customer.notes || "None"}`;
         <span className="min-w-8 text-2xl font-black">{qty}</span>
 
         <button
-          onClick={() => updateQty(name, 1, type)}
+          onClick={onPlus}
           className="h-10 w-10 rounded-xl bg-yellow-400 text-xl font-black text-black"
         >
           +
@@ -172,30 +190,25 @@ Notes: ${customer.notes || "None"}`;
           </h1>
 
           <p className="mx-auto mt-4 max-w-md text-lg text-gray-300">
-            Sticky. Strong. Irresistible. Built for anglers who want confidence
-            in every bait.
+            Premium bait boosters, sprays and pellets built for proper results
+            on the bank.
           </p>
 
-          <div className="mt-6 inline-block rounded-2xl bg-yellow-400 px-7 py-4 text-2xl font-black text-black shadow-lg shadow-yellow-500/20">
-            🔥 3 FOR £20 🔥
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl bg-yellow-400 p-4 font-black text-black">
+              Glooze 3 for £20
+            </div>
+            <div className="rounded-2xl bg-pink-500 p-4 font-black text-white">
+              Sprays 3 for £8
+            </div>
+            <div className="rounded-2xl bg-zinc-900 p-4 font-black text-white">
+              Pellets from £11.50
+            </div>
           </div>
 
-          <p className="mt-3 text-gray-300">
-            £8 each • Liquids delivery £3.50
+          <p className="mt-4 text-sm text-gray-400">
+            Liquids delivery £3.50 • Pellet orders delivery £3.95
           </p>
-          <p className="text-sm text-gray-400">Pellet orders delivery £3.95</p>
-
-          <div className="mt-6 grid grid-cols-3 gap-3 text-xs">
-            <div className="rounded-2xl border border-white/10 bg-black/60 p-3">
-              2 years tested
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/60 p-3">
-              PVA friendly
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/60 p-3">
-              UK made
-            </div>
-          </div>
 
           <a
             href={FACEBOOK_PAGE}
@@ -212,15 +225,17 @@ Notes: ${customer.notes || "None"}`;
         <h2 className="text-3xl font-black">Why Choose Murky Waters?</h2>
 
         <p className="mt-3 text-gray-300">
-          After 2 years of proper on-the-bank testing, every bottle is made with
-          high-quality ingredients and proven food sources. No gimmicks — just
-          bait confidence and serious attraction.
+          After 2 years of proper on-the-bank testing, every product is built
+          around attraction, confidence and results.
         </p>
 
         <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-          {["PVA Friendly", "Boosts Any Bait", "All Year Round", "Cheshire 40lber Proof"].map(
+          {["PVA Friendly", "Boosts Any Bait", "All Year Round", "Proven Results"].map(
             (item) => (
-              <div key={item} className="rounded-2xl border border-white/10 bg-black p-4">
+              <div
+                key={item}
+                className="rounded-2xl border border-white/10 bg-black p-4"
+              >
                 ✅ {item}
               </div>
             )
@@ -237,11 +252,11 @@ Notes: ${customer.notes || "None"}`;
       </section>
 
       <section className="rounded-3xl border border-pink-500/30 bg-zinc-950 p-5 text-center shadow-2xl">
-        <h2 className="text-3xl font-black">Join The Team</h2>
+        <h2 className="text-3xl font-black">Join The Murky Waters Team</h2>
 
         <p className="mt-3 text-gray-300">
-          Approved team members get 20% off products, access to socials, monthly
-          competitions and featured catches.
+          Approved team members get 20% off products, access to team socials,
+          monthly competitions and featured catches.
         </p>
 
         <a
@@ -255,27 +270,55 @@ Notes: ${customer.notes || "None"}`;
       </section>
 
       <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
-        <h2 className="text-center text-3xl font-black">Build Your Order</h2>
-
+        <h2 className="text-center text-3xl font-black">Fishing Glooze</h2>
         <p className="mb-5 mt-2 text-center text-gray-400">
-          Mix & match any flavours or choose 3 of the same.
+          £8 each or 3 for £20 — mix & match any flavours.
         </p>
 
         <div className="grid grid-cols-2 gap-4">
-          {Object.keys(glooze).map((item) => (
+          {gloozeFlavours.map((item) => (
             <ProductCard
               key={item}
               name={item}
               qty={glooze[item]}
-              type="glooze"
-              price="8 each"
+              price="£8 each"
+              tag={item === "Pineapple Dream" ? "Best Seller" : item === "Sweet Mango" ? "Team Pick" : ""}
+              desc="Premium liquid bait additive."
+              onMinus={() => updateQty(setGlooze, item, -1)}
+              onPlus={() => updateQty(setGlooze, item, 1)}
             />
           ))}
         </div>
+      </section>
 
-        <h3 className="mb-4 mt-8 text-center text-2xl font-black text-yellow-400">
-          Pellet Buckets
-        </h3>
+      <section className="mt-6 rounded-3xl border border-pink-500/20 bg-zinc-950 p-4">
+        <h2 className="text-center text-3xl font-black">25ml Booster Sprays</h2>
+        <p className="mb-5 mt-2 text-center text-gray-400">
+          £3.25 each or 3 for £8 — perfect for hookbaits, PVA bags, pellets and
+          particles.
+        </p>
+
+        <div className="grid grid-cols-2 gap-4">
+          {sprayFlavours.map((item) => (
+            <ProductCard
+              key={item}
+              name={item}
+              qty={sprays[item]}
+              price="£3.25 each"
+              tag={item === "Sweet Mango" ? "New" : item === "Tigernut" ? "Popular" : ""}
+              desc="Instant attraction booster spray."
+              onMinus={() => updateQty(setSprays, item, -1)}
+              onPlus={() => updateQty(setSprays, item, 1)}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
+        <h2 className="text-center text-3xl font-black">Pellet Buckets</h2>
+        <p className="mb-5 mt-2 text-center text-gray-400">
+          Premium feed pellets for PVA bags, spodding and keeping fish feeding.
+        </p>
 
         <div className="grid gap-4">
           {Object.keys(pellets).map((item) => (
@@ -283,13 +326,15 @@ Notes: ${customer.notes || "None"}`;
               key={item}
               name={item}
               qty={pellets[item]}
-              type="pellets"
-              price={pelletPrices[item].toFixed(2)}
-              description={
+              price={`£${pelletPrices[item].toFixed(2)}`}
+              tag={item.includes("Micro") ? "PVA Bag Hero" : "Food Signal"}
+              desc={
                 item.includes("Micro")
                   ? "Perfect for PVA bags, spod mixes and heavy baiting."
                   : "Strong food signal pellet designed to get fish feeding."
               }
+              onMinus={() => updateQty(setPellets, item, -1)}
+              onPlus={() => updateQty(setPellets, item, 1)}
             />
           ))}
         </div>
@@ -317,26 +362,35 @@ Notes: ${customer.notes || "None"}`;
       </section>
 
       <section className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-5">
-        <h2 className="mb-4 text-center text-3xl font-black">Delivery Details</h2>
+        <h2 className="mb-4 text-center text-3xl font-black">
+          Delivery Details
+        </h2>
 
-        {[
-          ["name", "Full name"],
-          ["postcode", "Postcode"],
-          ["email", "Email address"],
-        ].map(([field, label]) => (
-          <input
-            key={field}
-            placeholder={label}
-            value={customer[field]}
-            onChange={(e) => updateCustomer(field, e.target.value)}
-            className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
-          />
-        ))}
+        <input
+          placeholder="Full name"
+          value={customer.name}
+          onChange={(e) => updateCustomer("name", e.target.value)}
+          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
+        />
 
         <textarea
           placeholder="Full delivery address"
           value={customer.address}
           onChange={(e) => updateCustomer("address", e.target.value)}
+          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
+        />
+
+        <input
+          placeholder="Postcode"
+          value={customer.postcode}
+          onChange={(e) => updateCustomer("postcode", e.target.value)}
+          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
+        />
+
+        <input
+          placeholder="Email address"
+          value={customer.email}
+          onChange={(e) => updateCustomer("email", e.target.value)}
           className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
         />
 
@@ -380,12 +434,27 @@ Notes: ${customer.notes || "None"}`;
 
         <div className="space-y-3 text-sm text-gray-300">
           {[
-            ["Is Fishing Glooze PVA friendly?", "Yes — it is designed to be PVA friendly."],
-            ["Can I buy 3 of the same flavour?", "Yes — mix and match or choose multiples of the same flavour."],
-            ["How much is delivery?", "Standard liquid orders are £3.50. If pellets are selected, delivery is £3.95."],
-            ["Do discounts apply to delivery?", "No — team discounts apply to products only, not delivery."],
+            [
+              "Are the Glooze products PVA friendly?",
+              "Yes — they are designed to be PVA friendly.",
+            ],
+            [
+              "Can I mix and match deals?",
+              "Yes — Glooze is 3 for £20 and booster sprays are 3 for £8.",
+            ],
+            [
+              "How much is delivery?",
+              "Standard liquid orders are £3.50. If pellets are selected, delivery is £3.95.",
+            ],
+            [
+              "Do discounts apply to delivery?",
+              "No — team discounts apply to products only, not delivery.",
+            ],
           ].map(([q, a]) => (
-            <div key={q} className="rounded-2xl border border-white/10 bg-black p-4">
+            <div
+              key={q}
+              className="rounded-2xl border border-white/10 bg-black p-4"
+            >
               <strong>{q}</strong>
               <p>{a}</p>
             </div>
