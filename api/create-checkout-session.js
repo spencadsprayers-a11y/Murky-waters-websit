@@ -12,24 +12,39 @@ export default async function handler(req, res) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   try {
-    const { totals, customer } = req.body;
+    const { totals, customer, orderSummary } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
       customer_email: customer.email,
+
       line_items: [
         {
           price_data: {
             currency: "gbp",
             product_data: {
               name: "Murky Waters Order",
+              description: orderSummary || "Murky Waters bait order",
             },
             unit_amount: Math.round(totals.finalTotal * 100),
           },
           quantity: 1,
         },
       ],
+
+      metadata: {
+        customer_name: customer.name || "",
+        email: customer.email || "",
+        address: customer.address || "",
+        postcode: customer.postcode || "",
+        order_summary: orderSummary || "",
+        products_total: String(totals.productTotal || ""),
+        discount: String(totals.discountAmount || ""),
+        delivery: String(totals.delivery || ""),
+        final_total: String(totals.finalTotal || ""),
+      },
+
       success_url: `${req.headers.origin}/?success=true`,
       cancel_url: `${req.headers.origin}/?cancelled=true`,
     });
