@@ -53,7 +53,6 @@ const pelletPrices = {
 
 export default function App() {
   const [discountCode, setDiscountCode] = useState("");
-
   const [customer, setCustomer] = useState({
     name: "",
     address: "",
@@ -94,8 +93,7 @@ export default function App() {
   const wafterItems = Object.values(wafters).reduce((a, b) => a + b, 0);
   const pelletItems = Object.values(pellets).reduce((a, b) => a + b, 0);
 
-  const totalItems =
-    gloozeItems + sprayItems + wafterItems + pelletItems;
+  const totalItems = gloozeItems + sprayItems + wafterItems + pelletItems;
 
   const gloozeTotal =
     Math.floor(gloozeItems / 3) * 20 + (gloozeItems % 3) * 8;
@@ -111,30 +109,18 @@ export default function App() {
     0
   );
 
-  const productTotal =
-    gloozeTotal + sprayTotal + wafterTotal + pelletTotal;
+  const productTotal = gloozeTotal + sprayTotal + wafterTotal + pelletTotal;
 
   const discountActive =
     discountCode.trim().toUpperCase() === "MURKYWATERS20";
 
-  const discountAmount = discountActive
-    ? productTotal * 0.2
-    : 0;
+  const discountAmount = discountActive ? productTotal * 0.2 : 0;
 
-  const delivery =
-    totalItems > 0 ? (pelletItems > 0 ? 3.95 : 3.5) : 0;
+  const delivery = totalItems > 0 ? (pelletItems > 0 ? 3.95 : 3.5) : 0;
 
-  const finalTotal =
-    productTotal - discountAmount + delivery;
+  const finalTotal = productTotal - discountAmount + delivery;
 
-  const ProductCard = ({
-    name,
-    qty,
-    price,
-    onMinus,
-    onPlus,
-    tag,
-  }) => (
+  const ProductCard = ({ name, qty, price, onMinus, onPlus }) => (
     <div
       className={`relative rounded-3xl border p-4 text-center ${
         qty > 0
@@ -142,21 +128,13 @@ export default function App() {
           : "border-white/10 bg-zinc-950"
       }`}
     >
-      {tag && (
-        <div className="absolute right-3 top-3 rounded-full bg-yellow-400 px-3 py-1 text-xs font-black text-black">
-          {tag}
-        </div>
-      )}
-
       <div className="mb-3 mt-5 flex h-20 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-yellow-400/30 via-black to-pink-500/20">
         <span className="text-3xl">🎣</span>
       </div>
 
       <h3 className="text-lg font-black">{name}</h3>
 
-      <p className="mt-1 font-bold text-yellow-400">
-        {price}
-      </p>
+      <p className="mt-1 font-bold text-yellow-400">{price}</p>
 
       <div className="mt-4 flex items-center justify-center gap-4">
         <button
@@ -180,23 +158,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black px-4 pb-40 text-white">
-
       <section className="relative overflow-hidden rounded-b-[2rem] border-b border-yellow-500/30 bg-gradient-to-b from-yellow-900/40 via-black to-black py-12 text-center">
-
         <p className="text-xs font-black tracking-[0.4em] text-yellow-400">
           MURKY WATERS
         </p>
 
-        <h1 className="mt-3 text-5xl font-black">
-          Premium Carp Bait
-        </h1>
+        <h1 className="mt-3 text-5xl font-black">Premium Carp Bait</h1>
 
         <p className="mx-auto mt-4 max-w-md text-lg text-gray-300">
           Fishing Glooze, wafters, sprays and pellets built for proper results.
         </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-4">
-
           <div className="rounded-2xl bg-yellow-400 p-4 font-black text-black">
             Glooze 3 for £20
           </div>
@@ -212,7 +185,6 @@ export default function App() {
           <div className="rounded-2xl bg-zinc-900 p-4 font-black text-white">
             Pellets from £11.50
           </div>
-
         </div>
 
         <a
@@ -223,128 +195,112 @@ export default function App() {
         >
           👍 Visit Our Facebook Page
         </a>
-
       </section>
 
       <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
+        <h2 className="text-center text-3xl font-black">Fishing Glooze</h2>
 
-        <h2 className="text-center text-3xl font-black">
-          Fishing Glooze
-        </h2>
+        <p className="mt-2 text-center text-gray-400">
+          £8 each or 3 for £20
+        </p>
 
-        <div className="grid grid-cols-2 gap-4 mt-5">
+        <div className="mt-5 grid grid-cols-2 gap-4">
           {gloozeFlavours.map((item) => (
             <ProductCard
               key={item}
               name={item}
               qty={glooze[item]}
               price="£8 each"
-              onMinus={() =>
-                updateQty(setGlooze, item, -1)
-              }
-              onPlus={() =>
-                updateQty(setGlooze, item, 1)
-              }
+              onMinus={() => updateQty(setGlooze, item, -1)}
+              onPlus={() => updateQty(setGlooze, item, 1)}
             />
           ))}
         </div>
-
       </section>
 
       <section className="mt-6 rounded-3xl border border-pink-500/20 bg-zinc-950 p-4">
+        <h2 className="text-center text-3xl font-black">25ml Booster Sprays</h2>
 
-        <h2 className="text-center text-3xl font-black">
-          25ml Booster Sprays
-        </h2>
+        <p className="mt-2 text-center text-gray-400">
+          £3.50 each or 2 for £6
+        </p>
 
-        <div className="grid grid-cols-2 gap-4 mt-5">
+        <div className="mt-5 grid grid-cols-2 gap-4">
           {sprayFlavours.map((item) => (
             <ProductCard
               key={item}
               name={item}
               qty={sprays[item]}
               price="£3.50 each"
-              onMinus={() =>
-                updateQty(setSprays, item, -1)
-              }
-              onPlus={() =>
-                updateQty(setSprays, item, 1)
-              }
+              onMinus={() => updateQty(setSprays, item, -1)}
+              onPlus={() => updateQty(setSprays, item, 1)}
             />
           ))}
         </div>
-
       </section>
 
       <section className="mt-6 rounded-3xl border border-orange-500/20 bg-zinc-950 p-4">
-
         <h2 className="text-center text-3xl font-black">
           15mm Barrel Wafters
         </h2>
 
-        <div className="grid grid-cols-2 gap-4 mt-5">
+        <p className="mt-2 text-center text-gray-400">
+          £6 per pot or 2 pots for £10
+        </p>
+
+        <div className="mt-5 grid grid-cols-2 gap-4">
           {wafterFlavours.map((item) => (
             <ProductCard
               key={item}
               name={item}
               qty={wafters[item]}
               price="£6 per pot"
-              onMinus={() =>
-                updateQty(setWafters, item, -1)
-              }
-              onPlus={() =>
-                updateQty(setWafters, item, 1)
-              }
+              onMinus={() => updateQty(setWafters, item, -1)}
+              onPlus={() => updateQty(setWafters, item, 1)}
             />
           ))}
         </div>
-
       </section>
 
       <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
+        <h2 className="text-center text-3xl font-black">Pellet Buckets</h2>
 
-        <h2 className="text-center text-3xl font-black">
-          Pellet Buckets
-        </h2>
-
-        <div className="grid gap-4 mt-5">
+        <div className="mt-5 grid gap-4">
           {Object.keys(pellets).map((item) => (
             <ProductCard
               key={item}
               name={item}
               qty={pellets[item]}
               price={`£${pelletPrices[item].toFixed(2)}`}
-              onMinus={() =>
-                updateQty(setPellets, item, -1)
-              }
-              onPlus={() =>
-                updateQty(setPellets, item, 1)
-              }
+              onMinus={() => updateQty(setPellets, item, -1)}
+              onPlus={() => updateQty(setPellets, item, 1)}
             />
           ))}
         </div>
-
       </section>
 
       <section className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-5">
-
-        <h2 className="mb-4 text-center text-3xl font-black">
-          Discount Code
-        </h2>
+        <h2 className="mb-4 text-center text-3xl font-black">Discount Code</h2>
 
         <input
           placeholder="Enter discount code"
           value={discountCode}
-          onChange={(e) =>
-            setDiscountCode(e.target.value)
-          }
+          onChange={(e) => setDiscountCode(e.target.value)}
           className="w-full rounded-2xl border border-gray-600 bg-black p-4 text-center uppercase text-white"
         />
 
+        {discountActive && (
+          <p className="mt-4 text-center text-lg font-black text-green-400">
+            ✅ MURKYWATERS20 applied — 20% off products only
+          </p>
+        )}
+
+        <p className="mt-2 text-center text-xs text-gray-500">
+          Discount does not apply to delivery.
+        </p>
       </section>
 
       <section className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-5">
-
         <h2 className="mb-4 text-center text-3xl font-black">
           Delivery Details
         </h2>
@@ -352,70 +308,86 @@ export default function App() {
         <input
           placeholder="Full name"
           value={customer.name}
-          onChange={(e) =>
-            updateCustomer("name", e.target.value)
-          }
+          onChange={(e) => updateCustomer("name", e.target.value)}
           className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
         />
 
         <textarea
           placeholder="Full delivery address"
           value={customer.address}
-          onChange={(e) =>
-            updateCustomer("address", e.target.value)
-          }
+          onChange={(e) => updateCustomer("address", e.target.value)}
           className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
         />
 
         <input
           placeholder="Postcode"
           value={customer.postcode}
-          onChange={(e) =>
-            updateCustomer("postcode", e.target.value)
-          }
+          onChange={(e) => updateCustomer("postcode", e.target.value)}
           className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
         />
 
         <input
           placeholder="Email address"
           value={customer.email}
-          onChange={(e) =>
-            updateCustomer("email", e.target.value)
-          }
+          onChange={(e) => updateCustomer("email", e.target.value)}
           className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
         />
-
       </section>
 
       <section className="mt-6 rounded-3xl border border-yellow-500/30 bg-zinc-950 p-5 text-center">
+        <p className="text-sm text-gray-400">Order Summary</p>
 
-        <div className="text-5xl font-black text-green-400">
-          £{finalTotal.toFixed(2)}
+        <div className="mt-4 space-y-2 text-left text-gray-300">
+          <div className="flex justify-between">
+            <span>Products</span>
+            <span>£{productTotal.toFixed(2)}</span>
+          </div>
+
+          {discountActive && (
+            <div className="flex justify-between text-green-400">
+              <span>Team discount</span>
+              <span>-£{discountAmount.toFixed(2)}</span>
+            </div>
+          )}
+
+          <div className="flex justify-between">
+            <span>Delivery</span>
+            <span>£{delivery.toFixed(2)}</span>
+          </div>
         </div>
 
+        <div className="mt-5 text-5xl font-black text-green-400">
+          £{finalTotal.toFixed(2)}
+        </div>
       </section>
 
       {totalItems > 0 && (
         <div className="fixed bottom-0 left-0 right-0 border-t border-yellow-500/20 bg-black/95 p-4">
-
           <button
             onClick={async () => {
+              if (
+                !customer.name ||
+                !customer.address ||
+                !customer.postcode ||
+                !customer.email
+              ) {
+                alert("Please fill in your delivery details first.");
+                return;
+              }
+
               try {
-                const response = await fetch(
-                  "/api/create-checkout-session",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
+                const response = await fetch("/api/create-checkout-session", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    totals: {
+                      finalTotal,
                     },
-                    body: JSON.stringify({
-                      totals: {
-                        finalTotal,
-                      },
-                      customer,
-                    }),
-                  }
-                );
+                    customer,
+                  }),
+                });
 
                 const data = await response.json();
 
@@ -424,20 +396,16 @@ export default function App() {
                 } else {
                   alert("Payment error.");
                 }
-
               } catch (error) {
                 alert("Payment error.");
               }
             }}
             className="mx-auto block w-full max-w-md rounded-2xl bg-yellow-400 py-5 text-center text-xl font-black text-black shadow-lg"
           >
-            🔒 Secure Checkout • £
-            {finalTotal.toFixed(2)}
+            🔒 Secure Checkout • £{finalTotal.toFixed(2)}
           </button>
-
         </div>
       )}
-
     </div>
   );
 }
