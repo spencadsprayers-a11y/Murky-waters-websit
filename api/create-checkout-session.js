@@ -14,6 +14,8 @@ export default async function handler(req, res) {
   try {
     const { totals, customer, orderSummary } = req.body;
 
+    const fullAddress = `${customer.address || ""}, ${customer.postcode || ""}`;
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
             currency: "gbp",
             product_data: {
               name: "Murky Waters Order",
-              description: orderSummary || "Murky Waters bait order",
+              description: `Order: ${orderSummary || ""} | Address: ${fullAddress}`,
             },
             unit_amount: Math.round(totals.finalTotal * 100),
           },
@@ -35,8 +37,9 @@ export default async function handler(req, res) {
 
       metadata: {
         customer_name: customer.name || "",
-        email: customer.email || "",
-        address: customer.address || "",
+        customer_email: customer.email || "",
+        full_address: fullAddress,
+        delivery_address: customer.address || "",
         postcode: customer.postcode || "",
         order_summary: orderSummary || "",
         products_total: String(totals.productTotal || ""),
