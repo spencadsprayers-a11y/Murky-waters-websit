@@ -34,18 +34,6 @@ const sprayFlavours = [
   "Peach",
 ];
 
-const wafterFlavours = [
-  "Sweet Mango Black Pepper",
-  "Maple Cream",
-  "Squid + Octopus",
-  "Strawberry Cream",
-  "Pineapple Dream",
-  "Plum",
-  "Crayfish",
-  "Tigernut",
-  "Tutti Fruity",
-];
-
 const pelletPrices = {
   "3kg Micro Mini Mix Pellet": 13.5,
   "3kg 6mm Halibut Pellets": 11.5,
@@ -69,10 +57,6 @@ export default function App() {
     Object.fromEntries(sprayFlavours.map((f) => [f, 0]))
   );
 
-  const [wafters, setWafters] = useState(
-    Object.fromEntries(wafterFlavours.map((f) => [f, 0]))
-  );
-
   const [pellets, setPellets] = useState({
     "3kg Micro Mini Mix Pellet": 0,
     "3kg 6mm Halibut Pellets": 0,
@@ -94,11 +78,10 @@ export default function App() {
 
   const gloozeItems = Object.values(glooze).reduce((a, b) => a + b, 0);
   const sprayItems = Object.values(sprays).reduce((a, b) => a + b, 0);
-  const wafterItems = Object.values(wafters).reduce((a, b) => a + b, 0);
   const pelletItems = Object.values(pellets).reduce((a, b) => a + b, 0);
 
   const totalItems =
-    gloozeItems + sprayItems + wafterItems + pelletItems;
+    gloozeItems + sprayItems + pelletItems;
 
   const gloozeTotal =
     Math.floor(gloozeItems / 3) * 20 +
@@ -107,10 +90,6 @@ export default function App() {
   const sprayTotal =
     Math.floor(sprayItems / 2) * 6 +
     (sprayItems % 2) * 3.5;
-
-  const wafterTotal =
-    Math.floor(wafterItems / 2) * 10 +
-    (wafterItems % 2) * 6;
 
   const pelletTotal = Object.entries(pellets).reduce(
     (sum, [name, qty]) =>
@@ -121,7 +100,6 @@ export default function App() {
   const productTotal =
     gloozeTotal +
     sprayTotal +
-    wafterTotal +
     pelletTotal;
 
   const discountActive =
@@ -204,7 +182,7 @@ export default function App() {
         </h1>
 
         <p className="mx-auto mt-4 max-w-md text-lg text-gray-300">
-          Fishing Glooze, wafters, sprays and pellets built for proper results.
+          Fishing Glooze, sprays and pellets built for proper results.
         </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-4">
@@ -218,7 +196,7 @@ export default function App() {
           </div>
 
           <div className="rounded-2xl bg-orange-500 p-4 font-black text-white">
-            Wafters 2 for £10
+            Wafters Coming Soon
           </div>
 
           <div className="rounded-2xl bg-zinc-900 p-4 font-black text-white">
@@ -288,28 +266,20 @@ export default function App() {
 
       </section>
 
-      <section className="mt-6 rounded-3xl border border-orange-500/20 bg-zinc-950 p-4">
+      <section className="mt-6 rounded-3xl border border-orange-500/20 bg-zinc-950 p-8 text-center">
 
-        <h2 className="text-center text-3xl font-black">
-          15mm Barrel Wafters
+        <h2 className="text-4xl font-black text-white">
+          15mm / 12mm Wafters
         </h2>
 
-        <div className="mt-5 grid grid-cols-2 gap-4">
-          {wafterFlavours.map((item) => (
-            <ProductCard
-              key={item}
-              name={item}
-              qty={wafters[item]}
-              price="£6 per pot"
-              onMinus={() =>
-                updateQty(setWafters, item, -1)
-              }
-              onPlus={() =>
-                updateQty(setWafters, item, 1)
-              }
-            />
-          ))}
-        </div>
+        <p className="mt-4 text-xl font-bold text-orange-400">
+          COMING SOON 👀
+        </p>
+
+        <p className="mx-auto mt-4 max-w-md text-gray-400">
+          Our brand new match-the-hatch wafters are currently being tested by the
+          Murky Waters team and will be available very soon.
+        </p>
 
       </section>
 
@@ -452,12 +422,6 @@ export default function App() {
                   .filter(([, qty]) => qty > 0)
                   .map(([name, qty]) =>
                     `Booster Spray - ${name} x${qty}`
-                  ),
-
-                ...Object.entries(wafters)
-                  .filter(([, qty]) => qty > 0)
-                  .map(([name, qty]) =>
-                    `Wafters - ${name} x${qty}`
                   ),
 
                 ...Object.entries(pellets)
