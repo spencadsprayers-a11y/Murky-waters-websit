@@ -34,6 +34,13 @@ const sprayFlavours = [
   "Peach",
 ];
 
+const powderPrices = {
+  "Insect Meal 250g": 4.5,
+  "Fructose 250g": 4.5,
+  "Nut Blitz 250g": 4.5,
+  "Bloodworm Granules 250g": 4.5,
+};
+
 const pelletPrices = {
   "3kg Micro Mini Mix Pellet": 13.5,
   "3kg 6mm Halibut Pellets": 11.5,
@@ -57,6 +64,13 @@ export default function App() {
     Object.fromEntries(sprayFlavours.map((f) => [f, 0]))
   );
 
+  const [powders, setPowders] = useState({
+    "Insect Meal 250g": 0,
+    "Fructose 250g": 0,
+    "Nut Blitz 250g": 0,
+    "Bloodworm Granules 250g": 0,
+  });
+
   const [pellets, setPellets] = useState({
     "3kg Micro Mini Mix Pellet": 0,
     "3kg 6mm Halibut Pellets": 0,
@@ -78,10 +92,11 @@ export default function App() {
 
   const gloozeItems = Object.values(glooze).reduce((a, b) => a + b, 0);
   const sprayItems = Object.values(sprays).reduce((a, b) => a + b, 0);
+  const powderItems = Object.values(powders).reduce((a, b) => a + b, 0);
   const pelletItems = Object.values(pellets).reduce((a, b) => a + b, 0);
 
   const totalItems =
-    gloozeItems + sprayItems + pelletItems;
+    gloozeItems + sprayItems + powderItems + pelletItems;
 
   const gloozeTotal =
     Math.floor(gloozeItems / 3) * 20 +
@@ -90,6 +105,12 @@ export default function App() {
   const sprayTotal =
     Math.floor(sprayItems / 2) * 6 +
     (sprayItems % 2) * 3.5;
+
+  const powderTotal = Object.entries(powders).reduce(
+    (sum, [name, qty]) =>
+      sum + qty * powderPrices[name],
+    0
+  );
 
   const pelletTotal = Object.entries(pellets).reduce(
     (sum, [name, qty]) =>
@@ -100,6 +121,7 @@ export default function App() {
   const productTotal =
     gloozeTotal +
     sprayTotal +
+    powderTotal +
     pelletTotal;
 
   const discountActive =
@@ -182,39 +204,12 @@ export default function App() {
         </h1>
 
         <p className="mx-auto mt-4 max-w-md text-lg text-gray-300">
-          Fishing Glooze, sprays and pellets built for proper results.
+          Fishing Glooze, sprays, powders and pellets built for proper results.
         </p>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-4">
-
-          <div className="rounded-2xl bg-yellow-400 p-4 font-black text-black">
-            Glooze 3 for £20
-          </div>
-
-          <div className="rounded-2xl bg-pink-500 p-4 font-black text-white">
-            Sprays 2 for £6
-          </div>
-
-          <div className="rounded-2xl bg-orange-500 p-4 font-black text-white">
-            Wafters Coming Soon
-          </div>
-
-          <div className="rounded-2xl bg-zinc-900 p-4 font-black text-white">
-            Pellets from £11.50
-          </div>
-
-        </div>
-
-        <a
-          href={FACEBOOK_PAGE}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mx-auto mt-6 block max-w-md rounded-2xl bg-blue-600 py-4 font-black text-white"
-        >
-          👍 Visit Our Facebook Page
-        </a>
-
       </section>
+
+      {/* GLOOZE */}
 
       <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
 
@@ -241,6 +236,8 @@ export default function App() {
 
       </section>
 
+      {/* SPRAYS */}
+
       <section className="mt-6 rounded-3xl border border-pink-500/20 bg-zinc-950 p-4">
 
         <h2 className="text-center text-3xl font-black">
@@ -266,219 +263,32 @@ export default function App() {
 
       </section>
 
-      <section className="mt-6 rounded-3xl border border-orange-500/20 bg-zinc-950 p-8 text-center">
+      {/* BOOSTER POWDERS */}
 
-        <h2 className="text-4xl font-black text-white">
-          15mm / 12mm Wafters
-        </h2>
-
-        <p className="mt-4 text-xl font-bold text-orange-400">
-          COMING SOON 👀
-        </p>
-
-        <p className="mx-auto mt-4 max-w-md text-gray-400">
-          Our brand new match-the-hatch wafters are currently being tested by the
-          Murky Waters team and will be available very soon.
-        </p>
-
-      </section>
-
-      <section className="mt-6 rounded-3xl border border-yellow-500/20 bg-zinc-950 p-4">
+      <section className="mt-6 rounded-3xl border border-green-500/20 bg-zinc-950 p-4">
 
         <h2 className="text-center text-3xl font-black">
-          Pellet Buckets
+          250g Booster Powders
         </h2>
 
-        <div className="mt-5 grid gap-4">
-          {Object.keys(pellets).map((item) => (
+        <div className="mt-5 grid grid-cols-2 gap-4">
+          {Object.keys(powders).map((item) => (
             <ProductCard
               key={item}
               name={item}
-              qty={pellets[item]}
-              price={`£${pelletPrices[item].toFixed(2)}`}
+              qty={powders[item]}
+              price="£4.50 each"
               onMinus={() =>
-                updateQty(setPellets, item, -1)
+                updateQty(setPowders, item, -1)
               }
               onPlus={() =>
-                updateQty(setPellets, item, 1)
+                updateQty(setPowders, item, 1)
               }
             />
           ))}
         </div>
 
       </section>
-
-      <section className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-5">
-
-        <h2 className="mb-4 text-center text-3xl font-black">
-          Discount Code
-        </h2>
-
-        <input
-          placeholder="Enter discount code"
-          value={discountCode}
-          onChange={(e) =>
-            setDiscountCode(e.target.value)
-          }
-          className="w-full rounded-2xl border border-gray-600 bg-black p-4 text-center uppercase text-white"
-        />
-
-        {discountActive && (
-          <p className="mt-3 text-center font-bold text-green-400">
-            ✅ MURKYWATERS20 applied
-          </p>
-        )}
-
-      </section>
-
-      <section className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-5">
-
-        <h2 className="mb-4 text-center text-3xl font-black">
-          Delivery Details
-        </h2>
-
-        <input
-          placeholder="Full name"
-          value={customer.name}
-          onChange={(e) =>
-            updateCustomer("name", e.target.value)
-          }
-          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
-        />
-
-        <textarea
-          placeholder="Full delivery address"
-          value={customer.address}
-          onChange={(e) =>
-            updateCustomer("address", e.target.value)
-          }
-          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
-        />
-
-        <input
-          placeholder="Postcode"
-          value={customer.postcode}
-          onChange={(e) =>
-            updateCustomer("postcode", e.target.value)
-          }
-          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
-        />
-
-        <input
-          placeholder="Email address"
-          value={customer.email}
-          onChange={(e) =>
-            updateCustomer("email", e.target.value)
-          }
-          className="mb-3 w-full rounded-2xl border border-gray-600 bg-black p-4 text-white"
-        />
-
-      </section>
-
-      <section className="mt-6 rounded-3xl border border-yellow-500/30 bg-zinc-950 p-5 text-center">
-
-        <div className="space-y-2 text-left text-gray-300">
-
-          <div className="flex justify-between">
-            <span>Products</span>
-            <span>£{productTotal.toFixed(2)}</span>
-          </div>
-
-          {discountActive && (
-            <div className="flex justify-between text-green-400">
-              <span>Discount</span>
-              <span>-£{discountAmount.toFixed(2)}</span>
-            </div>
-          )}
-
-          <div className="flex justify-between">
-            <span>Delivery</span>
-            <span>£{delivery.toFixed(2)}</span>
-          </div>
-
-        </div>
-
-        <div className="mt-5 text-5xl font-black text-green-400">
-          £{finalTotal.toFixed(2)}
-        </div>
-
-      </section>
-
-      {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 border-t border-yellow-500/20 bg-black/95 p-4">
-
-          <button
-            onClick={async () => {
-
-              const orderSummary = [
-
-                ...Object.entries(glooze)
-                  .filter(([, qty]) => qty > 0)
-                  .map(([name, qty]) =>
-                    `Glooze - ${name} x${qty}`
-                  ),
-
-                ...Object.entries(sprays)
-                  .filter(([, qty]) => qty > 0)
-                  .map(([name, qty]) =>
-                    `Booster Spray - ${name} x${qty}`
-                  ),
-
-                ...Object.entries(pellets)
-                  .filter(([, qty]) => qty > 0)
-                  .map(([name, qty]) =>
-                    `${name} x${qty}`
-                  ),
-
-              ].join(" | ");
-
-              try {
-
-                const response = await fetch(
-                  "/api/create-checkout-session",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-
-                    body: JSON.stringify({
-                      totals: {
-                        productTotal,
-                        discountAmount,
-                        delivery,
-                        finalTotal,
-                      },
-
-                      customer,
-
-                      orderSummary,
-                    }),
-                  }
-                );
-
-                const data = await response.json();
-
-                if (data.url) {
-                  window.location.href = data.url;
-                } else {
-                  alert("Payment error.");
-                }
-
-              } catch (error) {
-                alert("Payment error.");
-              }
-            }}
-
-            className="mx-auto block w-full max-w-md rounded-2xl bg-yellow-400 py-5 text-center text-xl font-black text-black shadow-lg"
-          >
-            🔒 Secure Checkout • £
-            {finalTotal.toFixed(2)}
-          </button>
-
-        </div>
-      )}
-
     </div>
   );
 }
