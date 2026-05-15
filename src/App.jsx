@@ -281,7 +281,7 @@ export default function App() {
       <section className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-5">
         <h2 className="text-center text-3xl font-black">FAQ</h2>
         <FAQ q="Are your products PVA friendly?" a="Yes, the Glooze and bait products are designed to be PVA friendly." />
-        <FAQ q="Do team members get discount?" a="Yes, team members get 20% off products using MURKYWATERS20. Delivery is excluded." />
+        
         <FAQ q="How much is delivery?" a="Liquid orders are £3.50 delivery. Pellet orders are £3.95 delivery." />
         <FAQ q="Are wafters available yet?" a="Wafters are coming soon and will be added once ready." />
       </section>
