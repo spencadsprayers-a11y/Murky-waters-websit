@@ -53,6 +53,10 @@ const wafterProducts = [
   { name: "15mm/12mm Squid & Octopus Pink Wafters", price: 6, tag: "Pink Pot" },
 ];
 
+const boilieProducts = [
+  { name: "1kg Sweet Mango Black Pepper Boilies 15mm", price: 10, tag: "HNV Food Source" },
+];
+
 export default function App() {
   const [cart, setCart] = useState({});
   const [discountCode, setDiscountCode] = useState("");
@@ -103,6 +107,11 @@ export default function App() {
     0
   );
 
+  const boilieQty = boilieProducts.reduce(
+    (sum, p) => sum + qty(p.name),
+    0
+  );
+
   const gloozeTotal =
     Math.floor(gloozeQty / 3) * 20 + (gloozeQty % 3) * 8;
 
@@ -124,19 +133,26 @@ export default function App() {
     0
   );
 
+  const boilieTotal = boilieProducts.reduce(
+    (sum, p) => sum + qty(p.name) * p.price,
+    0
+  );
+
   const productTotal =
     gloozeTotal +
     sprayTotal +
     pelletTotal +
     powderTotal +
-    wafterTotal;
+    wafterTotal +
+    boilieTotal;
 
   const totalItems =
     gloozeQty +
     sprayQty +
     pelletQty +
     powderQty +
-    wafterQty;
+    wafterQty +
+    boilieQty;
 
   const discountActive =
     discountCode.trim().toUpperCase() === TEAM_CODE;
@@ -340,6 +356,17 @@ export default function App() {
 
       <Section title="Wafters">
         {wafterProducts.map((item) => (
+          <ProductCard
+            key={item.name}
+            name={item.name}
+            price={`£${item.price.toFixed(2)} each`}
+            tag={item.tag}
+          />
+        ))}
+      </Section>
+
+      <Section title="Boilies">
+        {boilieProducts.map((item) => (
           <ProductCard
             key={item.name}
             name={item.name}
